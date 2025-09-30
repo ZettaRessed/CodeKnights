@@ -323,7 +323,7 @@ export default function RegisterPage() {
                                         <ScrollText /> Acepto los Antiguos Decretos
                                     </FormLabel>
                                     <p className="text-sm text-muted-foreground">
-                                        Juro proteger el código, combatir los bugs y buscar siempre la lógica más pura y elegante. Al aceptar, confirmas que has leído nuestros Términos de Servicio y Política de Privacidad.
+                                        Juro proteger el código, combatir los bugs y buscar siempre la lógica más pura y elegante. Al aceptar, confirmas que has leído y estás de acuerdo con nuestros <a href="/terms" target="_blank" className="text-primary hover:underline">Términos de Servicio</a> y <a href="/privacy" target="_blank" className="text-primary hover:underline">Política de Privacidad</a>.
                                     </p>
                                     <FormMessage />
                                     </div>
@@ -362,3 +362,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+    

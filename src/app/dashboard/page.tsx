@@ -90,8 +90,9 @@ export default function DashboardPage() {
   useEffect(() => {
     if (character) {
       setLoadingPath(true);
+      const { icon, ...serializableClass } = character.class;
       getLearningPath({
-        characterClass: character.class,
+        characterClass: serializableClass,
         experienceLevel: character.experience,
         availableKingdoms: kingdoms.map(k => ({id: k.id, name: k.name, description: k.description}))
       }).then(path => {
@@ -278,3 +279,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    

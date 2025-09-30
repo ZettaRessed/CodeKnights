@@ -100,7 +100,7 @@ export default function DashboardPage() {
             <AvatarFallback>{user?.displayName?.charAt(0) || 'C'}</AvatarFallback>
             </Avatar>
             <h2 className="text-xl font-bold">{user?.displayName || <Skeleton className="h-6 w-32" />}</h2>
-            <div className="text-sm text-primary h-4">{characterClass?.name || <Skeleton className="h-4 w-24 mt-1" />}</div>
+            <div className="text-sm text-primary h-5">{characterClass?.name ? characterClass.name : <Skeleton className="h-4 w-24 mt-1" />}</div>
             <div className="w-full mt-4">
             <div className="flex justify-between items-center text-xs text-muted-foreground mb-1">
                 <span>Nivel 1</span>

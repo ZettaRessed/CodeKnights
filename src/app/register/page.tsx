@@ -27,11 +27,13 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { Book, ShieldQuestion, ScrollText, UserCheck, ChevronRight, ChevronLeft, KeyRound, Mail } from 'lucide-react';
+import { Book, ShieldQuestion, ScrollText, UserCheck, ChevronRight, ChevronLeft, KeyRound, Mail, WandSparkles } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { characterClasses } from '@/lib/character-classes';
+
 
 const formSchema = z
   .object({
@@ -40,6 +42,9 @@ const formSchema = z
     confirmPassword: z.string(),
     characterName: z.string().min(3, {
       message: 'El nombre de tu caballero debe tener al menos 3 caracteres.',
+    }),
+    characterClass: z.enum(characterClasses.map(c => c.id) as [string, ...string[]], {
+      required_error: 'Debes elegir una clase para tu caballero.',
     }),
     experience: z.enum(['new', 'experienced'], {
       required_error: 'Debes declarar tu experiencia.',
@@ -60,8 +65,9 @@ type FormData = z.infer<typeof formSchema>;
 const steps = [
   { id: 'step-1', fields: ['email', 'password', 'confirmPassword'] },
   { id: 'step-2', fields: ['characterName'] },
-  { id: 'step-3', fields: ['experience'] },
-  { id: 'step-4', fields: ['terms'] },
+  { id: 'step-3', fields: ['characterClass'] },
+  { id: 'step-4', fields: ['experience'] },
+  { id: 'step-5', fields: ['terms'] },
 ];
 
 export default function RegisterPage() {
@@ -116,13 +122,15 @@ export default function RegisterPage() {
       // 2. Update user profile with character name
       await updateProfile(user, {
         displayName: values.characterName,
+        // We could store the class in a custom claim or Firestore, but for now, let's keep it simple.
+        // photoURL could be used to store an avatar related to the class.
       });
 
       toast({
         title: '¡Juramento Aceptado!',
-        description: `Bienvenido, Sir ${values.characterName}. Tu leyenda comienza ahora.`,
+        description: `Bienvenido, Sir ${values.characterName}, el ${characterClasses.find(c => c.id === values.characterClass)?.name}. Tu leyenda comienza ahora.`,
       });
-      router.push('/story');
+      router.push('/dashboard'); // Go to dashboard after registration
     } catch (error: any) {
         toast({
             variant: 'destructive',
@@ -146,7 +154,7 @@ export default function RegisterPage() {
           alt="Fantasy landscape"
           fill
           objectFit="cover"
-          className="absolute inset-0 z-0 opacity-20 animate-fade-in"
+          className="absolute inset-0 z-0 opacity-40 animate-fade-in"
           data-ai-hint={authBackground.imageHint}
         />
       )}
@@ -166,7 +174,7 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="overflow-hidden min-h-[340px] flex flex-col">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="overflow-hidden min-h-[420px] flex flex-col">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentStep}
@@ -266,6 +274,43 @@ export default function RegisterPage() {
                         )}
                         {currentStep === 2 && (
                             <FormField
+                            control={form.control}
+                            name="characterClass"
+                            render={({ field }) => (
+                                <FormItem className="space-y-3">
+                                    <FormLabel className="text-lg flex items-center gap-2">
+                                        <WandSparkles /> Elige tu Vocación
+                                    </FormLabel>
+                                    <FormControl>
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"
+                                            disabled={isLoading}
+                                        >
+                                            {characterClasses.map((charClass) => (
+                                                <FormItem key={charClass.id} className="flex-1">
+                                                    <FormControl>
+                                                        <RadioGroupItem value={charClass.id} className="sr-only" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal flex items-center space-x-3 space-y-0 p-4 rounded-md border border-input bg-background/50 has-[:checked]:border-accent has-[:checked]:shadow-lg has-[:checked]:shadow-accent/20 cursor-pointer hover:border-accent/70 transition-all">
+                                                        <charClass.icon className="h-8 w-8 text-accent"/>
+                                                        <div>
+                                                            <span className="font-bold text-primary-foreground">{charClass.name}</span>
+                                                            <p className="text-xs text-muted-foreground">{charClass.description}</p>
+                                                        </div>
+                                                    </FormLabel>
+                                                </FormItem>
+                                            ))}
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        )}
+                        {currentStep === 3 && (
+                            <FormField
                                 control={form.control}
                                 name="experience"
                                 render={({ field }) => (
@@ -305,7 +350,7 @@ export default function RegisterPage() {
                                 )}
                             />
                         )}
-                        {currentStep === 3 && (
+                        {currentStep === 4 && (
                             <FormField
                                 control={form.control}
                                 name="terms"

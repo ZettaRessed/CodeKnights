@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,6 +14,7 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
   BookMarked,
   Bot,
@@ -26,12 +30,41 @@ import {
 } from 'lucide-react';
 
 export default function DashboardPage() {
+  const [code, setCode] = useState("let espada = 'Excalibur';\nlet escudo = 'Escudo del Dragón';\n\nconsole.log('Espada:', espada);\nconsole.log('Escudo:', escudo);");
+  const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
+  
   const characterAvatar = PlaceHolderImages.find(
     (img) => img.id === 'character-avatar'
   );
   const emptyStateArt = PlaceHolderImages.find(
     (img) => img.id === 'empty-state-art'
   );
+
+  const handleRunCode = () => {
+    const newOutput: string[] = [];
+    const originalConsoleLog = console.log;
+    
+    // Override console.log to capture output
+    console.log = (...args: any[]) => {
+      newOutput.push(args.map(arg => {
+        if (typeof arg === 'object' && arg !== null) {
+          return JSON.stringify(arg);
+        }
+        return String(arg);
+      }).join(' '));
+    };
+
+    try {
+      // Use Function constructor for safer evaluation than eval()
+      new Function(code)();
+      setConsoleOutput(newOutput);
+    } catch (error: any) {
+      setConsoleOutput([`Error: ${error.message}`]);
+    } finally {
+      // Restore original console.log
+      console.log = originalConsoleLog;
+    }
+  };
 
   return (
     <div className="flex h-screen w-full font-headline overflow-hidden bg-background dark:bg-black/40">
@@ -146,10 +179,12 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="h-96 bg-black/50 rounded-lg p-4 border border-primary/10 flex font-code text-base">
-                            <span className="text-muted-foreground/50 select-none pr-4">1</span>
-                            <p className="text-green-400">
-                                // El editor de código aparecerá aquí...
-                            </p>
+                           <Textarea 
+                                value={code}
+                                onChange={(e) => setCode(e.target.value)}
+                                placeholder="// El editor de código aparecerá aquí..."
+                                className="w-full h-full bg-transparent border-0 resize-none focus:outline-none focus-visible:ring-0 text-green-400"
+                           />
                         </div>
                     </CardContent>
                 </Card>
@@ -161,14 +196,19 @@ export default function DashboardPage() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-24 bg-black/50 rounded-lg flex items-center justify-center p-4">
-                        <p className="text-sm text-muted-foreground font-mono">La salida de tu código se mostrará aquí.</p>
+                        <div className="h-24 bg-black/50 rounded-lg p-4 font-mono text-sm text-gray-300 overflow-y-auto">
+                            {consoleOutput.length > 0 ? (
+                                consoleOutput.map((line, index) => (
+                                <div key={index}>&gt; {line}</div>
+                                ))
+                            ) : (
+                                <p className="text-muted-foreground">La salida de tu código se mostrará aquí.</p>
+                            )}
                         </div>
                     </CardContent>
                 </Card>
             </div>
         </div>
-
       </main>
 
       {/* Right Panel */}
@@ -201,7 +241,7 @@ export default function DashboardPage() {
                 <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                     Pedir Pista
                 </Button>
-                <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100">
+                <Button onClick={handleRunCode} size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100">
                     Ejecutar Código
                  </Button>
               </div>

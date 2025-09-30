@@ -130,7 +130,7 @@ export default function RegisterPage() {
         title: '¡Juramento Aceptado!',
         description: `Bienvenido, Sir ${values.characterName}, el ${characterClasses.find(c => c.id === values.characterClass)?.name}. Tu leyenda comienza ahora.`,
       });
-      router.push('/dashboard');
+      router.push('/story');
     } catch (error: any) {
         toast({
             variant: 'destructive',
@@ -407,3 +407,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+    

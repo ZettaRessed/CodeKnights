@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { getAuth, updateProfile } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { app } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,7 +27,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { Book, ShieldQuestion, ScrollText, UserCheck, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Book, ShieldQuestion, ScrollText, UserCheck, ChevronRight, ChevronLeft, KeyRound, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -35,6 +35,9 @@ import { cn } from '@/lib/utils';
 
 const formSchema = z
   .object({
+    email: z.string().email({ message: 'Debes usar un correo de caballero válido.' }),
+    password: z.string().min(6, { message: 'Tu contraseña secreta debe tener al menos 6 caracteres.' }),
+    confirmPassword: z.string(),
     characterName: z.string().min(3, {
       message: 'El nombre de tu caballero debe tener al menos 3 caracteres.',
     }),
@@ -42,6 +45,10 @@ const formSchema = z
       required_error: 'Debes declarar tu experiencia.',
     }),
     terms: z.boolean().default(false),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Las contraseñas no coinciden.',
+    path: ['confirmPassword'],
   })
   .refine((data) => data.terms, {
     message: 'Debes aceptar los Antiguos Decretos para continuar.',
@@ -51,9 +58,10 @@ const formSchema = z
 type FormData = z.infer<typeof formSchema>;
 
 const steps = [
-  { id: 'step-1', fields: ['characterName'] },
-  { id: 'step-2', fields: ['experience'] },
-  { id: 'step-3', fields: ['terms'] },
+  { id: 'step-1', fields: ['email', 'password', 'confirmPassword'] },
+  { id: 'step-2', fields: ['characterName'] },
+  { id: 'step-3', fields: ['experience'] },
+  { id: 'step-4', fields: ['terms'] },
 ];
 
 export default function RegisterPage() {
@@ -71,12 +79,13 @@ export default function RegisterPage() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
       characterName: '',
       terms: false,
     },
   });
-
-  const watchedFields = useWatch({ control: form.control });
 
   const next = async () => {
     const fields = steps[currentStep].fields as (keyof FormData)[];
@@ -99,35 +108,31 @@ export default function RegisterPage() {
 
   const onSubmit = async (values: FormData) => {
     setIsLoading(true);
-    const user = auth.currentUser;
+    try {
+      // 1. Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
 
-    if (user) {
-      try {
-        await updateProfile(user, {
-          displayName: values.characterName,
-        });
-
-        toast({
-          title: '¡Juramento Aceptado!',
-          description: `Bienvenido, Sir ${values.characterName}. Tu leyenda comienza ahora.`,
-        });
-        router.push('/dashboard');
-      } catch (error: any) {
-        toast({
-          variant: 'destructive',
-          title: 'Error en el Juramento',
-          description: error.message,
-        });
-        setIsLoading(false);
-      }
-    } else {
-      toast({
-        variant: 'destructive',
-        title: 'Error de Autenticación',
-        description: 'No se ha encontrado ningún caballero. Por favor, inicia sesión de nuevo.',
+      // 2. Update user profile with character name
+      await updateProfile(user, {
+        displayName: values.characterName,
       });
-      router.push('/');
-      setIsLoading(false);
+
+      toast({
+        title: '¡Juramento Aceptado!',
+        description: `Bienvenido, Sir ${values.characterName}. Tu leyenda comienza ahora.`,
+      });
+      router.push('/dashboard');
+    } catch (error: any) {
+        toast({
+            variant: 'destructive',
+            title: 'Error en el Juramento',
+            description: error.code === 'auth/email-already-in-use' 
+                ? 'Este correo ya ha sido reclamado por otro caballero.'
+                : error.message,
+        });
+    } finally {
+        setIsLoading(false);
     }
   };
 
@@ -161,7 +166,7 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="overflow-hidden">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="overflow-hidden min-h-[280px]">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentStep}
@@ -169,8 +174,75 @@ export default function RegisterPage() {
                         animate={{ opacity: 1, x: '0%' }}
                         exit={{ opacity: 0, x: delta >= 0 ? '-50%' : '50%' }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="space-y-6"
                     >
                         {currentStep === 0 && (
+                            <div className="space-y-4">
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-lg flex items-center gap-2">
+                                            <Mail /> Correo de Caballero
+                                        </FormLabel>
+                                        <FormControl>
+                                        <Input
+                                            placeholder="tu@correo.com"
+                                            {...field}
+                                            disabled={isLoading}
+                                            className="text-base"
+                                        />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-lg flex items-center gap-2">
+                                            <KeyRound /> Contraseña Secreta
+                                        </FormLabel>
+                                        <FormControl>
+                                        <Input
+                                            type="password"
+                                            placeholder="********"
+                                            {...field}
+                                            disabled={isLoading}
+                                            className="text-base"
+                                        />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="confirmPassword"
+                                    render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-lg flex items-center gap-2">
+                                            <KeyRound /> Confirma tu Contraseña
+                                        </FormLabel>
+                                        <FormControl>
+                                        <Input
+                                            type="password"
+                                            placeholder="********"
+                                            {...field}
+                                            disabled={isLoading}
+                                            className="text-base"
+                                        />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                    )}
+                                />
+                            </div>
+                        )}
+                        {currentStep === 1 && (
                         <FormField
                             control={form.control}
                             name="characterName"
@@ -192,7 +264,7 @@ export default function RegisterPage() {
                             )}
                         />
                         )}
-                        {currentStep === 1 && (
+                        {currentStep === 2 && (
                             <FormField
                                 control={form.control}
                                 name="experience"
@@ -233,7 +305,7 @@ export default function RegisterPage() {
                                 )}
                             />
                         )}
-                        {currentStep === 2 && (
+                        {currentStep === 3 && (
                             <FormField
                                 control={form.control}
                                 name="terms"
@@ -251,7 +323,7 @@ export default function RegisterPage() {
                                         <ScrollText /> Acepto los Antiguos Decretos
                                     </FormLabel>
                                     <p className="text-sm text-muted-foreground">
-                                        Juro proteger el código, combatir los bugs y buscar siempre la lógica más pura y elegante.
+                                        Juro proteger el código, combatir los bugs y buscar siempre la lógica más pura y elegante. Al aceptar, confirmas que has leído nuestros Términos de Servicio y Política de Privacidad.
                                     </p>
                                     <FormMessage />
                                     </div>

@@ -13,29 +13,45 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
 import {
   BookMarked,
   Bot,
   ChevronRight,
   Code2,
   Crown,
-  Gem,
   LayoutGrid,
-  Shield,
   Settings,
-  Swords,
   Users,
+  Briefcase,
+  GitBranch,
+  Pyramid,
+  BrainCircuit,
+  Eye,
+  Shield,
+  Server,
+  Skull
 } from 'lucide-react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { app } from '@/lib/firebase';
 import { characterClasses, CharacterClass } from '@/lib/character-classes';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import './map.css';
+
+
+const kingdoms = [
+  { id: 'java', name: 'Dominio de la Lógica Impecable', description: 'Reino de Java', icon: Briefcase, position: { top: '30%', left: '25%' } },
+  { id: 'csharp', name: 'Reino de las Estructuras Metálicas', description: 'Reino de C#', icon: Pyramid, position: { top: '55%', left: '15%' } },
+  { id: 'python', name: 'Reino de la Gran Serpiente', description: 'Reino de Python', icon: GitBranch, position: { top: '70%', left: '35%' } },
+  { id: 'ai', name: 'Valle del Aprendizaje Profundo', description: 'Reino de la IA', icon: BrainCircuit, position: { top: '80%', left: '60%' } },
+  { id: 'javascript', name: 'Reino de las Ilusiones Fluctuantes', description: 'Reino de JavaScript', icon: Eye, position: { top: '50%', left: '50%' } },
+  { id: 'cybersecurity', name: 'Caminos Sombríos de la Ciberseguridad', description: 'Reino de la Ciberseguridad', icon: Shield, position: { top: '20%', left: '70%' } },
+  { id: 'cloud', name: 'Reino de las Nubes Eternas', description: 'Reino de la Nube', icon: Server, position: { top: '45%', left: '80%' } },
+  { id: 'gamedev', name: 'Páramo del Videojuego', description: 'Reino del Desarrollo de Videojuegos', icon: Skull, position: { top: '68%', left: '85%' } },
+];
+
 
 export default function DashboardPage() {
-  const [code, setCode] = useState("let espada = 'Excalibur';\nlet escudo = 'Escudo del Dragón';\n\nconsole.log('Espada:', espada);\nconsole.log('Escudo:', escudo);");
-  const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [characterClass, setCharacterClass] = useState<CharacterClass | null>(null);
   
@@ -63,29 +79,6 @@ export default function DashboardPage() {
     (img) => img.id === 'empty-state-art'
   );
 
-  const handleRunCode = () => {
-    const newOutput: string[] = [];
-    const originalConsoleLog = console.log;
-    
-    console.log = (...args: any[]) => {
-      newOutput.push(args.map(arg => {
-        if (typeof arg === 'object' && arg !== null) {
-          return JSON.stringify(arg);
-        }
-        return String(arg);
-      }).join(' '));
-    };
-
-    try {
-      new Function(code)();
-      setConsoleOutput(newOutput);
-    } catch (error: any) {
-      setConsoleOutput([`Error: ${error.message}`]);
-    } finally {
-      console.log = originalConsoleLog;
-    }
-  };
-  
   const CharacterProfile = () => (
      <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
         <CardContent className="pt-6 flex flex-col items-center text-center">
@@ -147,90 +140,42 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col p-6 overflow-y-auto">
+      <main className="flex-1 flex flex-col p-6 overflow-hidden">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-          <span>Reino del Código</span>
-          <ChevronRight className="h-4 w-4" />
-          <span>Capítulo I</span>
-          <ChevronRight className="h-4 w-4" />
-          <span className="text-primary-foreground font-medium">El Despertar</span>
+          <span className="text-primary-foreground font-medium">Reinos del Código</span>
         </div>
         
-        <div className="grid grid-cols-3 gap-6 flex-1">
-            {/* Mission Details Column */}
-            <div className="col-span-1 flex flex-col gap-6">
-                <Card className="border-primary/20 flex-grow">
-                    <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-primary">
-                        <Swords className="h-5 w-5"/>
-                        El Despertar
-                    </CardTitle>
-                    <CardDescription>Tu primera misión te espera, noble Escudero. Aprende los comandos básicos para iniciar tu aventura.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-col gap-4">
-                        <Separator className="bg-primary/20"/>
-                        <h3 className="font-bold text-primary-foreground">Objetivos</h3>
-                        <ul className="list-disc list-inside text-muted-foreground space-y-2">
-                            <li>Declara una variable para tu espada.</li>
-                            <li>Asigna un nombre a tu escudo.</li>
-                            <li>Muestra tus items en la consola.</li>
-                        </ul>
-                         <Separator className="bg-primary/20"/>
-                        <h3 className="font-bold text-primary-foreground">Recompensas</h3>
-                         <div className="grid grid-cols-2 gap-4">
-                            <div className="flex flex-col items-center gap-2 p-2 rounded-lg bg-primary/10">
-                                <Gem className="h-8 w-8 text-accent"/>
-                                <span className="text-xs font-bold text-center">+100 XP</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-2 p-2 rounded-lg bg-primary/10">
-                                <Shield className="h-8 w-8 text-accent"/>
-                                <span className="text-xs font-bold text-center">Escudo Leal</span>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-            {/* Code Editor and Output Column */}
-            <div className="col-span-2 flex flex-col gap-6">
-                <Card className="border-primary/20 flex-[3]">
-                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-primary">
-                            <Code2 className="h-5 w-5" />
-                           Forja de Código
-                        </CardTitle>
-                        <CardDescription>Escribe tu código aquí para completar la misión.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-96 bg-black/50 rounded-lg p-4 border border-primary/10 flex font-code text-base">
-                           <Textarea 
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
-                                placeholder="// El editor de código aparecerá aquí..."
-                                className="w-full h-full bg-transparent border-0 resize-none focus:outline-none focus-visible:ring-0 text-green-400"
-                           />
-                        </div>
-                    </CardContent>
-                </Card>
-                 <Card className="border-primary/20 flex-[1]">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-primary">
-                        <ChevronRight className="h-5 w-5" />
-                        Consola de Ejecución
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-24 bg-black/50 rounded-lg p-4 font-mono text-sm text-gray-300 overflow-y-auto">
-                            {consoleOutput.length > 0 ? (
-                                consoleOutput.map((line, index) => (
-                                <div key={index}>&gt; {line}</div>
-                                ))
-                            ) : (
-                                <p className="text-muted-foreground">La salida de tu código se mostrará aquí.</p>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+        <div className="flex-1 w-full h-full rounded-lg border border-primary/20 overflow-hidden relative shadow-2xl shadow-primary/10">
+          <Image
+            src="https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freinos%2Fgenerated-image%20(28).png?alt=media&token=d98f956b-a637-4517-b3fb-0bf79c9c44e5"
+            alt="Mapa de los Reinos del Código"
+            layout="fill"
+            objectFit="cover"
+            className="z-0"
+          />
+          <div className="absolute inset-0 bg-black/30 z-10"></div>
+          
+          <TooltipProvider>
+            {kingdoms.map(kingdom => (
+              <Tooltip key={kingdom.id} delayDuration={100}>
+                <TooltipTrigger asChild>
+                  <div 
+                    className="absolute z-20"
+                    style={{ top: kingdom.position.top, left: kingdom.position.left, transform: 'translate(-50%, -50%)' }}
+                  >
+                    <div className="kingdom-node">
+                      <kingdom.icon className="h-8 w-8 text-white" />
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="bg-card/80 backdrop-blur-sm border-primary/30 text-primary-foreground">
+                  <p className="font-bold text-primary">{kingdom.name}</p>
+                  <p className="text-sm text-muted-foreground">{kingdom.description}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </TooltipProvider>
+
         </div>
       </main>
 
@@ -258,21 +203,11 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="flex flex-col h-[calc(100%-76px)]">
               <p className="text-sm text-muted-foreground mb-4">
-                ¿Atascado? El mago puede ofrecerte una pista para superar los desafíos del código.
+                Elige un reino para comenzar tu aventura. El mago te guiará cuando inicies una misión.
               </p>
-              <div className="mt-auto space-y-4">
-                <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-                    Pedir Pista
-                </Button>
-                <Button onClick={handleRunCode} size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100">
-                    Ejecutar Código
-                 </Button>
-              </div>
             </CardContent>
         </Card>
       </aside>
     </div>
   );
 }
-
-    

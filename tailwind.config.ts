@@ -100,6 +100,16 @@ export default {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        'pulse-glow': {
+          '0%, 100%': {
+            transform: 'scale(1)',
+            opacity: 0.7,
+          },
+          '50%': {
+            transform: 'scale(1.05)',
+            opacity: 1,
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -107,6 +117,7 @@ export default {
         'fade-in': 'fade-in 1s ease-in-out',
         'fade-out': 'fade-out 1s ease-in-out',
         'slide-in-from-bottom': 'slide-in-from-bottom 0.5s ease-out',
+        'pulse-glow': 'pulse-glow 3s infinite ease-in-out',
       },
     },
   },

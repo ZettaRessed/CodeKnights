@@ -1,0 +1,42 @@
+.kingdom-node {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: hsla(var(--primary) / 0.2);
+    border: 2px solid hsla(var(--primary) / 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 15px hsla(var(--primary) / 0.5), inset 0 0 10px hsla(var(--primary) / 0.3);
+    animation: pulse-glow 3s infinite ease-in-out;
+}
+
+.kingdom-node:hover {
+    transform: scale(1.1);
+    background-color: hsla(var(--accent) / 0.3);
+    border-color: hsla(var(--accent) / 1);
+    box-shadow: 0 0 25px hsla(var(--accent) / 0.7), inset 0 0 15px hsla(var(--accent) / 0.5);
+}
+
+.kingdom-node svg {
+    transition: all 0.3s ease;
+}
+
+.kingdom-node:hover svg {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 5px hsl(var(--accent)));
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px hsla(var(--primary) / 0.5), inset 0 0 10px hsla(var(--primary) / 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 25px hsla(var(--primary) / 0.8), inset 0 0 15px hsla(var(--primary) / 0.5);
+        transform: scale(1.05);
+    }
+}

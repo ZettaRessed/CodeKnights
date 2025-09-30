@@ -16,20 +16,24 @@ import { Progress } from '@/components/ui/progress';
 import {
   BookMarked,
   Bot,
-  ChevronRight,
-  Code2,
-  Crown,
+  Code,
+  Eye,
+  GitBranch,
+  Briefcase,
+  Pyramid,
+  Hammer,
+  Database,
+  BarChart2,
+  Mountain,
+  Gem,
+  Shield,
+  FileText,
+  Atom,
+  Layers,
+  Users,
   LayoutGrid,
   Settings,
-  Users,
-  Briefcase,
-  GitBranch,
-  Pyramid,
-  BrainCircuit,
-  Eye,
-  Shield,
-  Server,
-  Skull
+  Crown,
 } from 'lucide-react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { app } from '@/lib/firebase';
@@ -40,14 +44,22 @@ import './map.css';
 
 
 const kingdoms = [
-  { id: 'java', name: 'Dominio de la Lógica Impecable', description: 'Reino de Java', icon: Briefcase, position: { top: '30%', left: '25%' } },
-  { id: 'csharp', name: 'Reino de las Estructuras Metálicas', description: 'Reino de C#', icon: Pyramid, position: { top: '55%', left: '15%' } },
-  { id: 'python', name: 'Reino de la Gran Serpiente', description: 'Reino de Python', icon: GitBranch, position: { top: '70%', left: '35%' } },
-  { id: 'ai', name: 'Valle del Aprendizaje Profundo', description: 'Reino de la IA', icon: BrainCircuit, position: { top: '80%', left: '60%' } },
-  { id: 'javascript', name: 'Reino de las Ilusiones Fluctuantes', description: 'Reino de JavaScript', icon: Eye, position: { top: '50%', left: '50%' } },
-  { id: 'cybersecurity', name: 'Caminos Sombríos de la Ciberseguridad', description: 'Reino de la Ciberseguridad', icon: Shield, position: { top: '20%', left: '70%' } },
-  { id: 'cloud', name: 'Reino de las Nubes Eternas', description: 'Reino de la Nube', icon: Server, position: { top: '45%', left: '80%' } },
-  { id: 'gamedev', name: 'Páramo del Videojuego', description: 'Reino del Desarrollo de Videojuegos', icon: Skull, position: { top: '68%', left: '85%' } },
+  { id: 'html-css', name: 'Reino del Conocimiento Ancestral', description: 'Reino de HTML/CSS', icon: FileText, position: { top: '20%', left: '15%' } },
+  { id: 'javascript', name: 'Reino de las Ilusiones Fluctuantes', description: 'Reino de JavaScript', icon: Eye, position: { top: '35%', left: '30%' } },
+  { id: 'python', name: 'Reino de la Gran Serpiente', description: 'Reino de Python', icon: GitBranch, position: { top: '55%', left: '15%' } },
+  { id: 'java', name: 'Dominio de la Lógica Impecable', description: 'Reino de Java', icon: Briefcase, position: { top: '75%', left: '25%' } },
+  { id: 'csharp', name: 'Reino de las Estructuras Metálicas', description: 'Reino de C#', icon: Pyramid, position: { top: '25%', left: '45%' } },
+  { id: 'c-cpp', name: 'Reinos de la Forja Antigua', description: 'Reino de C/C++', icon: Hammer, position: { top: '45%', left: '55%' } },
+  { id: 'sql', name: 'Reino de la Bóveda de Datos', description: 'Reino de SQL', icon: Database, position: { top: '65%', left: '40%' } },
+  { id: 'r', name: 'El Bosque de los Estadísticos', description: 'Reino de R', icon: BarChart2, position: { top: '85%', left: '50%' } },
+  { id: 'go', name: 'El Páramo de los Golems', description: 'Reino de Go', icon: Code, position: { top: '15%', left: '65%' } },
+  { id: 'swift', name: 'Las Cimas de la Montaña de Cristal', description: 'Reino de Swift', icon: Mountain, position: { top: '35%', left: '75%' } },
+  { id: 'kotlin', name: 'El Valle del Hierro Nórdico', description: 'Reino de Kotlin', icon: Hammer, position: { top: '55%', left: '85%' } },
+  { id: 'rust', name: 'El Sendero de la Coraza Inmune', description: 'Reino de Rust', icon: Shield, position: { top: '75%', left: '70%' } },
+  { id: 'solidity', name: 'Reino de los Contratos', description: 'Reino de Solidity', icon: Gem, position: { top: '90%', left: '85%' } },
+  { id: 'qsharp', name: 'La Biblioteca del Futuro', description: 'Reino de Q#', icon: Atom, position: { top: '50%', left: '5%' } },
+  { id: 'cpp-shadows', name: 'Dominio de las Sombras', description: 'Reino de C++', icon: Code, position: { top: '5%', left: '35%' } },
+  { id: 'dart-flutter', name: 'Reino de la Dualidad', description: 'Reino de Dart con Flutter', icon: Layers, position: { top: '5%', left: '85%' } },
 ];
 
 

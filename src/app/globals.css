@@ -75,4 +75,12 @@
   }
 }
 
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 1s ease-in-out;
+  }
+  .animate-slide-in-from-bottom {
+    animation: slide-in-from-bottom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+}
     

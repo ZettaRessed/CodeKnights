@@ -92,12 +92,9 @@ export default function LoginPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
         router.push('/dashboard');
       }
     });
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [auth, router]);
 
@@ -158,12 +155,12 @@ export default function LoginPage() {
           alt="Fantasy landscape"
           layout="fill"
           objectFit="cover"
-          className="absolute inset-0 z-0 opacity-20"
+          className="absolute inset-0 z-0 opacity-20 animate-fade-in"
           data-ai-hint={authBackground.imageHint}
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
-      <Card className="z-20 w-full max-w-md bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20">
+      <Card className="z-20 w-full max-w-md bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 animate-slide-in-from-bottom">
         <CardHeader className="text-center">
           <div className="flex justify-center items-center gap-4 mb-2">
             <ShieldCheck className="h-10 w-10 text-primary" />

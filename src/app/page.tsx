@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,6 +11,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   GithubAuthProvider,
+  onAuthStateChanged,
   User,
 } from 'firebase/auth';
 import { app } from '@/lib/firebase';
@@ -87,6 +88,18 @@ export default function LoginPage() {
   const loreScrollImage = PlaceHolderImages.find(
     (img) => img.id === 'lore-scroll'
   );
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        router.push('/dashboard');
+      }
+    });
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [auth, router]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -96,12 +96,12 @@ export default function StoryPage() {
             </p>
             <div className="flex justify-center">
                 <Button
-                onClick={() => router.push('/dashboard')}
+                onClick={() => router.push('/register')}
                 size="lg"
                 className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100"
                 >
                 <Swords className="mr-2" />
-                ¡Continuar hacia la Aventura!
+                ¡Hacer el Juramento!
                 </Button>
             </div>
           </div>

@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "character-avatar",
+      "description": "Pixel art avatar of a knight",
+      "imageUrl": "https://images.unsplash.com/photo-1553644417-7acf71f4af2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwaXhlbCUyMGFydCUyMGtuaWdodHxlbnwwfHx8fDE3NTkyMDA3MzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pixel art knight"
+    },
+    {
+      "id": "empty-state-art",
+      "description": "Pixel art illustration of a medieval kingdom or castle",
+      "imageUrl": "https://images.unsplash.com/photo-1729353639797-e8681e770b16?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwaXhlbCUyMGFydCUyMGtpbmdkb218ZW58MHx8fHwxNzU5MjUxODMyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pixel art kingdom"
+    }
+  ]
 }

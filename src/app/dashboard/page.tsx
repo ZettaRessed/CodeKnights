@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -28,11 +28,34 @@ import {
   Swords,
   Users,
 } from 'lucide-react';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { app } from '@/lib/firebase';
+import { characterClasses, CharacterClass } from '@/lib/character-classes';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardPage() {
   const [code, setCode] = useState("let espada = 'Excalibur';\nlet escudo = 'Escudo del Dragón';\n\nconsole.log('Espada:', espada);\nconsole.log('Escudo:', escudo);");
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [characterClass, setCharacterClass] = useState<CharacterClass | null>(null);
   
+  const auth = getAuth(app);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        // NOTE: Character class is not saved during registration in the current implementation.
+        // We'll assign a default or random one for display purposes.
+        // In a real scenario, this would be fetched from Firestore.
+        const storedClassId = localStorage.getItem('characterClass') as CharacterClass['id'] | null;
+        const selectedClass = characterClasses.find(c => c.id === storedClassId) || characterClasses[0];
+        setCharacterClass(selectedClass);
+      }
+    });
+    return () => unsubscribe();
+  }, [auth]);
+
   const characterAvatar = PlaceHolderImages.find(
     (img) => img.id === 'character-avatar'
   );
@@ -44,7 +67,6 @@ export default function DashboardPage() {
     const newOutput: string[] = [];
     const originalConsoleLog = console.log;
     
-    // Override console.log to capture output
     console.log = (...args: any[]) => {
       newOutput.push(args.map(arg => {
         if (typeof arg === 'object' && arg !== null) {
@@ -55,16 +77,44 @@ export default function DashboardPage() {
     };
 
     try {
-      // Use Function constructor for safer evaluation than eval()
       new Function(code)();
       setConsoleOutput(newOutput);
     } catch (error: any) {
       setConsoleOutput([`Error: ${error.message}`]);
     } finally {
-      // Restore original console.log
       console.log = originalConsoleLog;
     }
   };
+  
+  const CharacterProfile = () => (
+     <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
+        <CardContent className="pt-6 flex flex-col items-center text-center">
+            <Avatar className="h-24 w-24 border-4 border-primary/50 mb-4">
+            {characterAvatar && (
+                <AvatarImage
+                src={characterAvatar.imageUrl}
+                alt="Character Avatar"
+                data-ai-hint={characterAvatar.imageHint}
+                />
+            )}
+            <AvatarFallback>{user?.displayName?.charAt(0) || 'C'}</AvatarFallback>
+            </Avatar>
+            <h2 className="text-xl font-bold">{user?.displayName || <Skeleton className="h-6 w-32" />}</h2>
+            <p className="text-sm text-primary">{characterClass?.name || <Skeleton className="h-4 w-24 mt-1" />}</p>
+            <div className="w-full mt-4">
+            <div className="flex justify-between items-center text-xs text-muted-foreground mb-1">
+                <span>Nivel 1</span>
+                <span>50/100 XP</span>
+            </div>
+            <Progress
+                value={50}
+                className="h-3 bg-primary/20"
+                indicatorClassName="bg-accent shadow-[0_0_8px_theme(colors.accent.DEFAULT)]"
+            />
+            </div>
+        </CardContent>
+    </Card>
+  )
 
   return (
     <div className="flex h-screen w-full font-headline overflow-hidden bg-background dark:bg-black/40">
@@ -77,34 +127,7 @@ export default function DashboardPage() {
           </h1>
         </header>
 
-        {/* Character Profile */}
-        <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
-          <CardContent className="pt-6 flex flex-col items-center text-center">
-            <Avatar className="h-24 w-24 border-4 border-primary/50 mb-4">
-              {characterAvatar && (
-                <AvatarImage
-                  src={characterAvatar.imageUrl}
-                  alt="Character Avatar"
-                  data-ai-hint={characterAvatar.imageHint}
-                />
-              )}
-              <AvatarFallback>CK</AvatarFallback>
-            </Avatar>
-            <h2 className="text-xl font-bold">Sir Codealot</h2>
-            <p className="text-sm text-primary">Escudero</p>
-            <div className="w-full mt-4">
-              <div className="flex justify-between items-center text-xs text-muted-foreground mb-1">
-                <span>Nivel 1</span>
-                <span>50/100 XP</span>
-              </div>
-              <Progress
-                value={50}
-                className="h-3 bg-primary/20"
-                indicatorClassName="bg-accent shadow-[0_0_8px_theme(colors.accent.DEFAULT)]"
-              />
-            </div>
-          </CardContent>
-        </Card>
+        <CharacterProfile />
 
         {/* Navigation */}
         <nav className="flex flex-col gap-2 flex-grow">
@@ -233,7 +256,7 @@ export default function DashboardPage() {
                 Mago Consejero
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col h-full">
+            <CardContent className="flex flex-col h-[calc(100%-76px)]">
               <p className="text-sm text-muted-foreground mb-4">
                 ¿Atascado? El mago puede ofrecerte una pista para superar los desafíos del código.
               </p>
@@ -251,5 +274,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    

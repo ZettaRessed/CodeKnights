@@ -32,7 +32,7 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { characterClasses } from '@/lib/character-classes';
+import { characterClasses, CharacterClass } from '@/lib/character-classes';
 
 
 const formSchema = z
@@ -115,22 +115,22 @@ export default function RegisterPage() {
   const onSubmit = async (values: FormData) => {
     setIsLoading(true);
     try {
-      // 1. Create user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
 
-      // 2. Update user profile with character name
       await updateProfile(user, {
         displayName: values.characterName,
-        // We could store the class in a custom claim or Firestore, but for now, let's keep it simple.
-        // photoURL could be used to store an avatar related to the class.
       });
+      
+      // NOTE: We are not storing the class in Firestore yet.
+      // For now, let's store it in localStorage for the dashboard to pick it up.
+      localStorage.setItem('characterClass', values.characterClass);
 
       toast({
         title: '¡Juramento Aceptado!',
         description: `Bienvenido, Sir ${values.characterName}, el ${characterClasses.find(c => c.id === values.characterClass)?.name}. Tu leyenda comienza ahora.`,
       });
-      router.push('/dashboard'); // Go to dashboard after registration
+      router.push('/dashboard');
     } catch (error: any) {
         toast({
             variant: 'destructive',

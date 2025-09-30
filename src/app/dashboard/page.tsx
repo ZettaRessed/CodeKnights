@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -34,6 +34,8 @@ import {
   LayoutGrid,
   Settings,
   Crown,
+  Map,
+  Sparkles,
 } from 'lucide-react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { app } from '@/lib/firebase';
@@ -41,7 +43,8 @@ import { characterClasses, CharacterClass } from '@/lib/character-classes';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import './map.css';
-
+import { getLearningPath, LearningPathOutput } from '@/ai/flows/learning-path-recommendation';
+import { cn } from '@/lib/utils';
 
 const kingdoms = [
   { id: 'html-css', name: 'Reino del Conocimiento Ancestral', description: 'Reino de HTML/CSS', icon: FileText, position: { top: '20%', left: '15%' } },
@@ -65,7 +68,9 @@ const kingdoms = [
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [characterClass, setCharacterClass] = useState<CharacterClass | null>(null);
+  const [character, setCharacter] = useState<{class: CharacterClass, experience: string} | null>(null);
+  const [learningPath, setLearningPath] = useState<LearningPathOutput | null>(null);
+  const [loadingPath, setLoadingPath] = useState(true);
   
   const auth = getAuth(app);
 
@@ -73,16 +78,31 @@ export default function DashboardPage() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        // NOTE: Character class is not saved during registration in the current implementation.
-        // We'll assign a default or random one for display purposes.
-        // In a real scenario, this would be fetched from Firestore.
         const storedClassId = localStorage.getItem('characterClass') as CharacterClass['id'] | null;
+        const storedExperience = localStorage.getItem('characterExperience') || 'new';
         const selectedClass = characterClasses.find(c => c.id === storedClassId) || characterClasses[0];
-        setCharacterClass(selectedClass);
+        setCharacter({class: selectedClass, experience: storedExperience});
       }
     });
     return () => unsubscribe();
   }, [auth]);
+
+  useEffect(() => {
+    if (character) {
+      setLoadingPath(true);
+      getLearningPath({
+        characterClass: character.class,
+        experienceLevel: character.experience,
+        availableKingdoms: kingdoms.map(k => ({id: k.id, name: k.name, description: k.description}))
+      }).then(path => {
+        setLearningPath(path);
+        setLoadingPath(false);
+      }).catch(error => {
+        console.error("Error getting learning path:", error);
+        setLoadingPath(false);
+      });
+    }
+  }, [character]);
 
   const characterAvatar = PlaceHolderImages.find(
     (img) => img.id === 'character-avatar'
@@ -90,6 +110,10 @@ export default function DashboardPage() {
   const emptyStateArt = PlaceHolderImages.find(
     (img) => img.id === 'empty-state-art'
   );
+  
+  const recommendedKingdomIds = useMemo(() => {
+    return new Set(learningPath?.recommendedPath.map(p => p.kingdomId) || []);
+  }, [learningPath]);
 
   const CharacterProfile = () => (
      <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
@@ -105,7 +129,7 @@ export default function DashboardPage() {
             <AvatarFallback>{user?.displayName?.charAt(0) || 'C'}</AvatarFallback>
             </Avatar>
             <h2 className="text-xl font-bold">{user?.displayName || <Skeleton className="h-6 w-32" />}</h2>
-            <div className="text-sm text-primary h-5">{characterClass?.name ? characterClass.name : <Skeleton className="h-4 w-24 mt-1" />}</div>
+            <div className="text-sm text-primary h-5">{character?.class.name ? character.class.name : <Skeleton className="h-4 w-24 mt-1" />}</div>
             <div className="w-full mt-4">
             <div className="flex justify-between items-center text-xs text-muted-foreground mb-1">
                 <span>Nivel 1</span>
@@ -137,7 +161,10 @@ export default function DashboardPage() {
         {/* Navigation */}
         <nav className="flex flex-col gap-2 flex-grow">
           <Button variant="ghost" className="justify-start gap-3 text-lg h-12 bg-primary/10 text-primary-foreground">
-            <LayoutGrid className="h-5 w-5 text-accent" /> Misiones
+            <Map className="h-5 w-5 text-accent" /> Reinos
+          </Button>
+          <Button variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground">
+            <LayoutGrid className="h-5 w-5" /> Misiones
           </Button>
           <Button variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground">
             <Users className="h-5 w-5" /> Gremio
@@ -172,7 +199,10 @@ export default function DashboardPage() {
               <Tooltip key={kingdom.id} delayDuration={100}>
                 <TooltipTrigger asChild>
                   <div 
-                    className="absolute z-20"
+                    className={cn(
+                      "absolute z-20",
+                      recommendedKingdomIds.has(kingdom.id) && "recommended-path"
+                    )}
                     style={{ top: kingdom.position.top, left: kingdom.position.left, transform: 'translate(-50%, -50%)' }}
                   >
                     <div className="kingdom-node">
@@ -214,9 +244,34 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col h-[calc(100%-76px)]">
-              <p className="text-sm text-muted-foreground mb-4">
-                Elige un reino para comenzar tu aventura. El mago te guiará cuando inicies una misión.
-              </p>
+              {loadingPath ? (
+                <div className='space-y-3'>
+                  <Skeleton className='h-4 w-full' />
+                  <Skeleton className='h-4 w-4/5' />
+                  <Skeleton className='h-4 w-full' />
+                </div>
+              ) : learningPath ? (
+                  <div className="text-sm text-muted-foreground space-y-3">
+                    <p>{learningPath.introduction}</p>
+                    <div className='space-y-2'>
+                      <p className='font-bold text-primary-foreground flex items-center gap-2'><Sparkles className='text-accent'/> Tu Senda Recomendada:</p>
+                      <ul className='list-decimal list-inside pl-2 space-y-1'>
+                        {learningPath.recommendedPath.map(step => {
+                          const kingdom = kingdoms.find(k => k.id === step.kingdomId);
+                          return (
+                            <li key={step.kingdomId} className='text-xs'>
+                              <span className='font-semibold'>{kingdom?.name || step.kingdomId}</span>: {step.reason}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+              ) : (
+                <p className="text-sm text-muted-foreground mb-4">
+                  Elige un reino para comenzar tu aventura. El mago te guiará cuando inicies una misión.
+                </p>
+              )}
             </CardContent>
         </Card>
       </aside>

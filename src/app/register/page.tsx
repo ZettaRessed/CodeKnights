@@ -122,9 +122,8 @@ export default function RegisterPage() {
         displayName: values.characterName,
       });
       
-      // NOTE: We are not storing the class in Firestore yet.
-      // For now, let's store it in localStorage for the dashboard to pick it up.
       localStorage.setItem('characterClass', values.characterClass);
+      localStorage.setItem('characterExperience', values.experience);
 
       toast({
         title: '¡Juramento Aceptado!',

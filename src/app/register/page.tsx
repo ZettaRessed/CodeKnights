@@ -129,7 +129,7 @@ export default function RegisterPage() {
             title: 'Error en el Juramento',
             description: error.code === 'auth/email-already-in-use' 
                 ? 'Este correo ya ha sido reclamado por otro caballero.'
-                : error.message,
+                : 'Ha ocurrido un error inesperado al registrar tu juramento.',
         });
     } finally {
         setIsLoading(false);
@@ -146,7 +146,7 @@ export default function RegisterPage() {
           alt="Fantasy landscape"
           fill
           objectFit="cover"
-          className="absolute inset-0 z-0 opacity-10 animate-fade-in"
+          className="absolute inset-0 z-0 opacity-20 animate-fade-in"
           data-ai-hint={authBackground.imageHint}
         />
       )}
@@ -362,5 +362,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-    

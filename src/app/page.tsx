@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ScrollText } from 'lucide-react';
+import { ScrollText, LogIn } from 'lucide-react';
 
 export default function RootPage() {
   const router = useRouter();
@@ -48,13 +48,24 @@ export default function RootPage() {
             <p className="text-lg text-primary-foreground">
                 Tu leyenda está a punto de comenzar, caballero. ¿Estás listo para forjar tu destino?
             </p>
-          <Button
-            onClick={() => router.push('/dashboard')}
-            size="lg"
-            className="w-full max-w-xs bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100"
-          >
-            ¡Comenzar Aventura!
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xs">
+            <Button
+              onClick={() => router.push('/dashboard')}
+              size="lg"
+              className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100"
+            >
+              ¡Comenzar Aventura!
+            </Button>
+             <Button
+              onClick={() => router.push('/login')}
+              size="lg"
+              variant="outline"
+              className="w-full text-lg font-bold"
+            >
+              <LogIn className="mr-2 h-5 w-5" />
+              Iniciar Sesión
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

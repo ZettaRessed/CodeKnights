@@ -122,7 +122,7 @@ export default function RegisterPage() {
         title: '¡Juramento Aceptado!',
         description: `Bienvenido, Sir ${values.characterName}. Tu leyenda comienza ahora.`,
       });
-      router.push('/dashboard');
+      router.push('/story');
     } catch (error: any) {
         toast({
             variant: 'destructive',
@@ -144,7 +144,7 @@ export default function RegisterPage() {
         <Image
           src={authBackground.imageUrl}
           alt="Fantasy landscape"
-          layout="fill"
+          fill
           objectFit="cover"
           className="absolute inset-0 z-0 opacity-10 animate-fade-in"
           data-ai-hint={authBackground.imageHint}
@@ -166,7 +166,7 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="overflow-hidden min-h-[280px]">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="overflow-hidden min-h-[340px] flex flex-col">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentStep}
@@ -174,7 +174,7 @@ export default function RegisterPage() {
                         animate={{ opacity: 1, x: '0%' }}
                         exit={{ opacity: 0, x: delta >= 0 ? '-50%' : '50%' }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="space-y-6"
+                        className="space-y-6 flex-grow"
                     >
                         {currentStep === 0 && (
                             <div className="space-y-4">
@@ -334,7 +334,7 @@ export default function RegisterPage() {
                     </motion.div>
                 </AnimatePresence>
 
-              <div className="mt-8 pt-5 flex justify-between">
+              <div className="mt-auto pt-5 flex justify-between">
                 <Button type="button" onClick={prev} variant="outline" className={cn({ hidden: currentStep === 0 })}>
                     <ChevronLeft className="mr-2 h-4 w-4" /> Anterior
                 </Button>

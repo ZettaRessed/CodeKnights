@@ -111,14 +111,16 @@ export default function LoginPage() {
       title: '¡Bienvenido de vuelta!',
       description: `Has iniciado sesión como ${user.displayName || user.email}.`,
     });
-    router.push('/story');
+    router.push('/dashboard');
   };
 
   const handleAuthError = (error: any) => {
     toast({
       variant: 'destructive',
       title: 'Error de Autenticación',
-      description: error.message,
+      description: error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' 
+        ? 'El correo o la contraseña son incorrectos.'
+        : 'Ha ocurrido un error inesperado.',
     });
     setIsLoading(false);
   };
@@ -153,7 +155,7 @@ export default function LoginPage() {
         <Image
           src={authBackground.imageUrl}
           alt="Fantasy landscape"
-          layout="fill"
+          fill
           objectFit="cover"
           className="absolute inset-0 z-0 opacity-20 animate-fade-in"
           data-ai-hint={authBackground.imageHint}

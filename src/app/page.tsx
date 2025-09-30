@@ -250,7 +250,7 @@ export default function LoginPage() {
           </div>
            <p className="mt-6 text-center text-sm text-muted-foreground">
               ¿Eres un nuevo caballero?{' '}
-              <a href="#" className="text-primary hover:underline">
+              <a href="/register" className="text-primary hover:underline">
                 Crea tu cuenta aquí.
               </a>
             </p>

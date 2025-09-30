@@ -3,68 +3,116 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ScrollText, LogIn } from 'lucide-react';
+import { LogIn, Swords } from 'lucide-react';
+
+const ComicPanel = ({
+  imageUrl,
+  imageHint,
+  caption,
+  alt,
+}: {
+  imageUrl: string;
+  imageHint: string;
+  caption: string;
+  alt: string;
+}) => (
+  <div className="flex flex-col gap-2">
+    <div className="relative aspect-video w-full rounded-lg overflow-hidden border-2 border-primary/50 shadow-lg shadow-primary/20">
+      <Image
+        src={imageUrl}
+        alt={alt}
+        fill
+        objectFit="cover"
+        data-ai-hint={imageHint}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+    </div>
+    <p className="text-center text-sm text-muted-foreground p-2 bg-black/20 rounded-md">
+      {caption}
+    </p>
+  </div>
+);
 
 export default function RootPage() {
   const router = useRouter();
-  const loreScrollImage = PlaceHolderImages.find(
-    (img) => img.id === 'lore-scroll'
-  );
+  const binaryVoidImage = PlaceHolderImages.find((img) => img.id === 'binary-void');
+  const firstCommandImage = PlaceHolderImages.find((img) => img.id === 'first-command');
+  const bugMonsterImage = PlaceHolderImages.find((img) => img.id === 'bug-monster');
+  const codeKnightImage = PlaceHolderImages.find((img) => img.id === 'code-knight-hero');
 
   return (
     <div className="relative min-h-screen w-full bg-background font-headline text-foreground flex items-center justify-center p-4 overflow-hidden">
-      {loreScrollImage && (
-        <Image
-          src={loreScrollImage.imageUrl}
-          alt="Ancient Scroll"
-          layout="fill"
-          objectFit="cover"
-          className="absolute inset-0 z-0 opacity-20"
-          data-ai-hint={loreScrollImage.imageHint}
-        />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-black/50 to-background z-10"></div>
 
-      <Card className="z-20 max-w-3xl w-full bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20">
-        <CardHeader className="text-center">
-          <div className="flex justify-center items-center gap-4 mb-2">
-            <ScrollText className="h-10 w-10 text-primary" />
+      <Card className="z-20 max-w-4xl w-full bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20">
+        <CardContent className="p-6">
+          <div className="text-center mb-6">
             <h1 className="text-4xl font-bold text-primary-foreground">
-              CodeKnights
+              La Saga de los CodeKnights
             </h1>
+            <p className="text-primary">Una crónica de código y caos</p>
           </div>
-          <CardTitle className="text-2xl text-primary">La Gran Saga de los Reinos del Código</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center flex flex-col items-center gap-6">
-            <div className="max-h-64 overflow-y-auto p-4 rounded-lg bg-black/30 border border-primary/20 text-left">
-                <h3 className="text-xl font-bold text-accent mb-4">Prólogo: El Vacío de Bits</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                Antes de los reinos hubo un océano de oscuridad, el Mar del Caos Binario. Allí nació la Llama Binaria, chispa que dio vida al Primer Reino: la Torre de los Comandos Tejidos (1801), donde los hilos obedecían órdenes perforadas.
-                Los sabios Charles Babbage y Ada Lovelace intentaron alzar la Fortaleza Analítica, pero la traición del tiempo la dejó incompleta. Ada, la Hechicera del Algoritmo, escribió las primeras runas del destino.
-                </p>
-            </div>
-            <p className="text-lg text-primary-foreground">
-                Tu leyenda está a punto de comenzar, caballero. ¿Estás listo para forjar tu destino?
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {binaryVoidImage && (
+              <ComicPanel
+                imageUrl={binaryVoidImage.imageUrl}
+                imageHint={binaryVoidImage.imageHint}
+                alt="El Vacío Binario"
+                caption="En el principio, solo existía el Vacío Binario. Un mar de caos..."
+              />
+            )}
+            {firstCommandImage && (
+              <ComicPanel
+                imageUrl={firstCommandImage.imageUrl}
+                imageHint={firstCommandImage.imageHint}
+                alt="La Primera Chispa"
+                caption="...hasta que una chispa, el Primer Comando, trajo la lógica a la oscuridad."
+              />
+            )}
+            {bugMonsterImage && (
+              <ComicPanel
+                imageUrl={bugMonsterImage.imageUrl}
+                imageHint={bugMonsterImage.imageHint}
+                alt="El Monstruo Bug"
+                caption="Pero donde hay código, las sombras acechan. Nacieron los BUGS, bestias que devoran la realidad."
+              />
+            )}
+            {codeKnightImage && (
+              <ComicPanel
+                imageUrl={codeKnightImage.imageUrl}
+                imageHint={codeKnightImage.imageHint}
+                alt="El Héroe CodeKnight"
+                caption="Para combatirlos, surgen los CodeKnights. Héroes armados con lógica y valor, destinados a proteger los reinos."
+              />
+            )}
+          </div>
+          
+          <div className="text-center">
+             <p className="text-lg text-primary-foreground mb-6">
+                Tu leyenda está a punto de comenzar. ¿Estás listo para forjar tu destino?
             </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xs">
-            <Button
-              onClick={() => router.push('/dashboard')}
-              size="lg"
-              className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100"
-            >
-              ¡Comenzar Aventura!
-            </Button>
-             <Button
-              onClick={() => router.push('/login')}
-              size="lg"
-              variant="outline"
-              className="w-full text-lg font-bold"
-            >
-              <LogIn className="mr-2 h-5 w-5" />
-              Iniciar Sesión
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                onClick={() => router.push('/dashboard')}
+                size="lg"
+                className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100"
+                >
+                <Swords className="mr-2" />
+                ¡Comenzar Aventura!
+                </Button>
+                <Button
+                onClick={() => router.push('/login')}
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto text-lg font-bold"
+                >
+                <LogIn className="mr-2 h-5 w-5" />
+                Iniciar Sesión
+                </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -17,6 +17,30 @@
       "description": "An ancient scroll on a wooden table, with a quill and ink nearby.",
       "imageUrl": "https://images.unsplash.com/photo-1661457714206-ebdf21eb1c10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YW5jaWVudCUyMHNjcm9sbHxlbnwwfHx8fDE3NTkyNDI5OTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "ancient scroll"
+    },
+    {
+      "id": "binary-void",
+      "description": "Abstract image of a dark void with floating binary code.",
+      "imageUrl": "https://images.unsplash.com/photo-1721378466904-3b0b21152470?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxiaW5hcnklMjBjb2RlJTIwZGFya3xlbnwwfHx8fDE3NTkyNTg1MTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "binary code dark"
+    },
+    {
+      "id": "first-command",
+      "description": "A single spark of light in the darkness.",
+      "imageUrl": "https://images.unsplash.com/photo-1610638333463-af9537909fad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGFyayUyMGxpZ2h0fGVufDB8fHx8MTc1OTI1ODUxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spark light"
+    },
+    {
+      "id": "bug-monster",
+      "description": "A pixel art representation of a monstrous bug.",
+      "imageUrl": "https://images.unsplash.com/photo-1653723367970-ae966c1b803e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwaXhlbCUyMGFydCUyMG1vbnN0ZXJ8ZW58MHx8fHwxNzU5MjU0NTk2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pixel art monster"
+    },
+    {
+      "id": "code-knight-hero",
+      "description": "A pixel art knight holding a glowing sword, ready for battle.",
+      "imageUrl": "https://images.unsplash.com/photo-1638606528724-66c8cf8f3f88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwaXhlbCUyMGFydCUyMGhlcm98ZW58MHx8fHwxNzU5MjU4NTEzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pixel art hero"
     }
   ]
 }

@@ -85,8 +85,8 @@ export default function LoginPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const auth = getAuth(app);
-  const loreScrollImage = PlaceHolderImages.find(
-    (img) => img.id === 'lore-scroll'
+  const authBackground = PlaceHolderImages.find(
+    (img) => img.id === 'auth-background'
   );
 
   useEffect(() => {
@@ -152,14 +152,14 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-background font-headline text-foreground flex items-center justify-center p-4 overflow-hidden">
-      {loreScrollImage && (
+      {authBackground && (
         <Image
-          src={loreScrollImage.imageUrl}
-          alt="Ancient Scroll"
+          src={authBackground.imageUrl}
+          alt="Fantasy landscape"
           layout="fill"
           objectFit="cover"
           className="absolute inset-0 z-0 opacity-20"
-          data-ai-hint={loreScrollImage.imageHint}
+          data-ai-hint={authBackground.imageHint}
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>

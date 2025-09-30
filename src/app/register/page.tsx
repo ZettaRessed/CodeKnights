@@ -52,8 +52,8 @@ export default function RegisterPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const auth = getAuth(app);
-  const knightOathImage = PlaceHolderImages.find(
-    (img) => img.id === 'knight-oath'
+  const authBackground = PlaceHolderImages.find(
+    (img) => img.id === 'auth-background'
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -103,14 +103,14 @@ export default function RegisterPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-background font-headline text-foreground flex items-center justify-center p-4 overflow-hidden">
-      {knightOathImage && (
+      {authBackground && (
         <Image
-          src={knightOathImage.imageUrl}
-          alt="Un caballero arrodillándose para prestar juramento."
+          src={authBackground.imageUrl}
+          alt="Fantasy landscape"
           layout="fill"
           objectFit="cover"
           className="absolute inset-0 z-0 opacity-10"
-          data-ai-hint={knightOathImage.imageHint}
+          data-ai-hint={authBackground.imageHint}
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background z-10"></div>

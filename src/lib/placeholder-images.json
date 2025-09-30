@@ -13,10 +13,10 @@
       "imageHint": "pixel art kingdom"
     },
     {
-      "id": "lore-scroll",
-      "description": "An ancient scroll on a wooden table, with a quill and ink nearby.",
-      "imageUrl": "https://images.unsplash.com/photo-1661457714206-ebdf21eb1c10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YW5jaWVudCUyMHNjcm9sbHxlbnwwfHx8fDE3NTkyNDI5OTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "ancient scroll"
+      "id": "auth-background",
+      "description": "A fantasy landscape with castles and dragons.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Finicio%2Fgenerated-image%20(26).png?alt=media&token=f6644fe4-f91d-47ba-aadc-88c3e0c8f1ee",
+      "imageHint": "fantasy landscape"
     },
     {
       "id": "binary-void",

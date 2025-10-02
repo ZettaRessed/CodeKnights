@@ -12,7 +12,7 @@ export default {
       fontFamily: {
         body: ['"Space Grotesk"', 'sans-serif'],
         headline: ['"Space Grotesk"', 'sans-serif'],
-        code: ['monospace'],
+        code: ['"Fira Code"', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -110,6 +110,10 @@ export default {
             opacity: 1,
           },
         },
+         'spin-slow': {
+            '0%': { transform: 'rotate(0deg)' },
+            '100%': { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -118,6 +122,7 @@ export default {
         'fade-out': 'fade-out 1s ease-in-out',
         'slide-in-from-bottom': 'slide-in-from-bottom 0.5s ease-out',
         'pulse-glow': 'pulse-glow 3s infinite ease-in-out',
+        'spin-slow': 'spin-slow 3s linear infinite',
       },
     },
   },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -47,6 +47,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import './map.css';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
+import { missions } from '@/lib/missions';
 
 const CustomIcon = ({ src, alt }: { src: string, alt: string }) => (
   <Image src={src} alt={alt} width={32} height={32} className="h-8 w-8" />
@@ -95,10 +97,7 @@ export default function DashboardPage() {
   const characterAvatar = PlaceHolderImages.find(
     (img) => img.id === 'character-avatar'
   );
-  const emptyStateArt = PlaceHolderImages.find(
-    (img) => img.id === 'empty-state-art'
-  );
-
+  
   const CharacterProfile = () => (
      <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
         <CardContent className="pt-6 flex flex-col items-center text-center">
@@ -167,31 +166,35 @@ export default function DashboardPage() {
     <div className="flex-1 w-full h-full rounded-lg border border-primary/20 bg-background/50 backdrop-blur-sm p-6 overflow-y-auto">
       {character ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="bg-card/80 border-primary/20 hover:border-accent hover:shadow-accent/10 hover:shadow-lg transition-all">
-            <CardHeader>
-              <div className='flex justify-between items-start'>
-                <div>
-                  <CardTitle className='text-primary-foreground'>El Pergamino Fundacional</CardTitle>
-                  <CardDescription className='text-muted-foreground'>Tu primera misión</CardDescription>
+          {missions.filter(m => m.kingdomId === 'html-css' && m.level === 1).map(mission => (
+            <Card key={mission.slug} className="bg-card/80 border-primary/20 hover:border-accent hover:shadow-accent/10 hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className='flex justify-between items-start'>
+                  <div>
+                    <CardTitle className='text-primary-foreground'>{mission.title}</CardTitle>
+                    <CardDescription className='text-muted-foreground'>{mission.description}</CardDescription>
+                  </div>
+                  <Badge variant="outline" className='border-accent text-accent'>Fácil</Badge>
                 </div>
-                <Badge variant="outline" className='border-accent text-accent'>Fácil</Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                El Anciano Escriba del Reino del Conocimiento Ancestral te ha convocado. Debes demostrar tu valía creando una simple estructura HTML, el papiro sobre el que se escriben todas las leyendas del código.
-              </p>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <FileText className="h-4 w-4 text-primary" />
-                <span>Reino de HTML/CSS</span>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                <Swords className="mr-2 h-4 w-4" /> ¡Aceptar Misión!
-              </Button>
-            </CardFooter>
-          </Card>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {mission.summary}
+                </p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <FileText className="h-4 w-4 text-primary" />
+                  <span>Reino de HTML/CSS</span>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Link href={`/mission/${mission.slug}`}>
+                    <Swords className="mr-2 h-4 w-4" /> ¡Aceptar Misión!
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
           {/* Add more mission cards here */}
         </div>
       ) : (
@@ -324,5 +327,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    

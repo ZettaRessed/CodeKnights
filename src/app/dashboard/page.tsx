@@ -50,14 +50,18 @@ import { getLearningPath, LearningPathOutput } from '@/ai/flows/learning-path-re
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 
+const CustomIcon = ({ src, alt }: { src: string, alt: string }) => (
+  <Image src={src} alt={alt} width={32} height={32} className="h-8 w-8" />
+);
+
 const kingdoms = [
-  { id: 'html-css', name: 'Reino del Conocimiento Ancestral', description: 'Reino de HTML/CSS', icon: FileText, position: { top: '20%', left: '15%' } },
-  { id: 'javascript', name: 'Reino de las Ilusiones Fluctuantes', description: 'Reino de JavaScript', icon: Eye, position: { top: '35%', left: '30%' } },
-  { id: 'python', name: 'Reino de la Gran Serpiente', description: 'Reino de Python', icon: GitBranch, position: { top: '55%', left: '15%' } },
+  { id: 'html-css', name: 'Reino del Conocimiento Ancestral', description: 'Reino de HTML/CSS', icon: () => <CustomIcon src="https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freinos%2FIconos%2FHTML.png?alt=media&token=95d20d9e-d246-47b2-aa7d-67173509d8a3" alt="HTML/CSS Icon" />, position: { top: '20%', left: '15%' } },
+  { id: 'javascript', name: 'Reino de las Ilusiones Fluctuantes', description: 'Reino de JavaScript', icon: () => <CustomIcon src="https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freinos%2FIconos%2FJS.png?alt=media&token=edb54c36-c8f1-49ce-b8eb-d81263d98a03" alt="JavaScript Icon" />, position: { top: '35%', left: '30%' } },
+  { id: 'python', name: 'Reino de la Gran Serpiente', description: 'Reino de Python', icon: () => <CustomIcon src="https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freinos%2FIconos%2FPython.png?alt=media&token=7c71e84e-aac5-49bf-9d0d-b600a1e76ab4" alt="Python Icon" />, position: { top: '55%', left: '15%' } },
   { id: 'java', name: 'Dominio de la Lógica Impecable', description: 'Reino de Java', icon: Briefcase, position: { top: '75%', left: '25%' } },
   { id: 'csharp', name: 'Reino de las Estructuras Metálicas', description: 'Reino de C#', icon: Pyramid, position: { top: '25%', left: '45%' } },
-  { id: 'c-cpp', name: 'Reinos de la Forja Antigua', description: 'Reino de C/C++', icon: Hammer, position: { top: '45%', left: '55%' } },
-  { id: 'sql', name: 'Reino de la Bóveda de Datos', description: 'Reino de SQL', icon: Database, position: { top: '65%', left: '40%' } },
+  { id: 'c-cpp', name: 'Reinos de la Forja Antigua', description: 'Reino de C/C++', icon: () => <CustomIcon src="https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freinos%2FIconos%2FC_C%2B%2B.png?alt=media&token=3fecb1f5-0b60-4fa2-af58-4c6e112e72b5" alt="C/C++ Icon" />, position: { top: '45%', left: '55%' } },
+  { id: 'sql', name: 'Reino de la Bóveda de Datos', description: 'Reino de SQL', icon: () => <CustomIcon src="https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freinos%2FIconos%2FSQL.png?alt=media&token=3bbd5eac-69b4-4b4f-814d-4aadd596bacc" alt="SQL Icon" />, position: { top: '65%', left: '40%' } },
   { id: 'r', name: 'El Bosque de los Estadísticos', description: 'Reino de R', icon: BarChart2, position: { top: '85%', left: '50%' } },
   { id: 'go', name: 'El Páramo de los Golems', description: 'Reino de Go', icon: Code, position: { top: '15%', left: '65%' } },
   { id: 'swift', name: 'Las Cimas de la Montaña de Cristal', description: 'Reino de Swift', icon: Mountain, position: { top: '35%', left: '75%' } },
@@ -174,7 +178,7 @@ export default function DashboardPage() {
                 style={{ top: kingdom.position.top, left: kingdom.position.left, transform: 'translate(-50%, -50%)' }}
               >
                 <div className="kingdom-node">
-                  <kingdom.icon className="h-8 w-8 text-white" />
+                  <kingdom.icon />
                 </div>
               </div>
             </TooltipTrigger>

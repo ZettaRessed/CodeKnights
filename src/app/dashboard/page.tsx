@@ -16,10 +16,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 import {
   BookMarked,
-  Bot,
   Code,
-  Eye,
-  GitBranch,
   Briefcase,
   Pyramid,
   Hammer,
@@ -36,9 +33,11 @@ import {
   Settings,
   Crown,
   Map,
-  Sparkles,
   Swords,
   Scroll,
+  ShoppingCart,
+  Star,
+  Zap,
 } from 'lucide-react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { app } from '@/lib/firebase';
@@ -46,7 +45,6 @@ import { characterClasses, CharacterClass } from '@/lib/character-classes';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import './map.css';
-import { getLearningPath, LearningPathOutput } from '@/ai/flows/learning-path-recommendation';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 
@@ -77,8 +75,6 @@ const kingdoms = [
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [character, setCharacter] = useState<{class: CharacterClass, experience: string} | null>(null);
-  const [learningPath, setLearningPath] = useState<LearningPathOutput | null>(null);
-  const [loadingPath, setLoadingPath] = useState(true);
   const [activeView, setActiveView] = useState<'reinos' | 'misiones'>('reinos');
   
   const auth = getAuth(app);
@@ -96,34 +92,12 @@ export default function DashboardPage() {
     return () => unsubscribe();
   }, [auth]);
 
-  useEffect(() => {
-    if (character) {
-      setLoadingPath(true);
-      const { icon, ...serializableClass } = character.class;
-      getLearningPath({
-        characterClass: serializableClass,
-        experienceLevel: character.experience,
-        availableKingdoms: kingdoms.map(k => ({id: k.id, name: k.name, description: k.description}))
-      }).then(path => {
-        setLearningPath(path);
-        setLoadingPath(false);
-      }).catch(error => {
-        console.error("Error getting learning path:", error);
-        setLoadingPath(false);
-      });
-    }
-  }, [character]);
-
   const characterAvatar = PlaceHolderImages.find(
     (img) => img.id === 'character-avatar'
   );
   const emptyStateArt = PlaceHolderImages.find(
     (img) => img.id === 'empty-state-art'
   );
-  
-  const recommendedKingdomIds = useMemo(() => {
-    return new Set(learningPath?.recommendedPath.map(p => p.kingdomId) || []);
-  }, [learningPath]);
 
   const CharacterProfile = () => (
      <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
@@ -171,10 +145,7 @@ export default function DashboardPage() {
           <Tooltip key={kingdom.id} delayDuration={100}>
             <TooltipTrigger asChild>
               <div 
-                className={cn(
-                  "absolute z-20",
-                  recommendedKingdomIds.has(kingdom.id) && "recommended-path"
-                )}
+                className="absolute z-20"
                 style={{ top: kingdom.position.top, left: kingdom.position.left, transform: 'translate(-50%, -50%)' }}
               >
                 <div className="kingdom-node">
@@ -194,7 +165,7 @@ export default function DashboardPage() {
 
   const MissionsView = () => (
     <div className="flex-1 w-full h-full rounded-lg border border-primary/20 bg-background/50 backdrop-blur-sm p-6 overflow-y-auto">
-      {learningPath && learningPath.recommendedPath.length > 0 ? (
+      {character ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card className="bg-card/80 border-primary/20 hover:border-accent hover:shadow-accent/10 hover:shadow-lg transition-all">
             <CardHeader>
@@ -228,7 +199,7 @@ export default function DashboardPage() {
           <Scroll className="h-24 w-24 text-primary/30 mb-4" />
           <h3 className="text-2xl font-bold text-primary-foreground">Aún no hay misiones en tu bitácora.</h3>
           <p className="text-muted-foreground mt-2 max-w-md">
-            El Mago Consejero te recomienda visitar primero el <span className="font-bold text-primary">Mapa de los Reinos</span> para trazar tu senda. Una vez que tengas un camino, las misiones aparecerán aquí.
+            Visita primero el <span className="font-bold text-primary">Mapa de los Reinos</span> para trazar tu senda. Una vez que inicies tu viaje, las misiones aparecerán aquí.
           </p>
           <Button onClick={() => setActiveView('reinos')} className="mt-6">
             <Map className="mr-2 h-4 w-4" /> Ir a los Reinos
@@ -237,6 +208,33 @@ export default function DashboardPage() {
       )}
     </div>
   );
+
+  const SubscriptionCard = ({ title, price, features, recommended }: { title: string, price: string, features: string[], recommended?: boolean }) => (
+    <Card className={cn("border-primary/20 bg-gradient-to-br from-primary/5 to-transparent", recommended && "border-accent/50")}>
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <CardTitle className={cn("text-primary-foreground", recommended && "text-accent")}>{title}</CardTitle>
+          {recommended && <Badge variant="outline" className="border-accent text-accent">Recomendado</Badge>}
+        </div>
+        <p className="text-2xl font-bold">{price}<span className="text-sm font-normal text-muted-foreground">/mes</span></p>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          {features.map((feature, i) => (
+            <li key={i} className="flex items-center gap-2">
+              <Star className="h-4 w-4 text-accent" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+      <CardFooter>
+        <Button className={cn("w-full", recommended && "bg-accent text-accent-foreground hover:bg-accent/90")}>
+          <Zap className="mr-2 h-4 w-4" /> Suscribirse
+        </Button>
+      </CardFooter>
+    </Card>
+  )
 
 
   return (
@@ -285,59 +283,46 @@ export default function DashboardPage() {
       </main>
 
       {/* Right Panel */}
-      <aside className="w-[300px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-l border-primary/10 p-4 flex flex-col gap-6">
-        {emptyStateArt && (
-            <div className="relative h-48 w-full rounded-lg overflow-hidden">
-            <Image
-                src={emptyStateArt.imageUrl}
-                alt="Kingdom Art"
-                fill
-                objectFit="cover"
-                data-ai-hint={emptyStateArt.imageHint}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent"></div>
-            </div>
-        )}
-        
-        <Card className="border-accent/30 bg-gradient-to-br from-accent/10 to-transparent flex-grow">
+      <aside className="w-[350px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-l border-primary/10 p-4 flex flex-col gap-4 overflow-y-auto">
+        <Card className="border-accent/30 bg-gradient-to-br from-accent/10 to-transparent">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-accent">
-                <Bot className="h-5 w-5" />
-                Mago Consejero
-              </CardTitle>
+                <CardTitle className="flex items-center gap-2 text-accent">
+                    <ShoppingCart className="h-5 w-5" />
+                    Tienda del Gremio
+                </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col h-[calc(100%-76px)]">
-              {loadingPath ? (
-                <div className='space-y-3'>
-                  <Skeleton className='h-4 w-full' />
-                  <Skeleton className='h-4 w-4/5' />
-                  <Skeleton className='h-4 w-full' />
+            <CardContent className="text-center">
+                <p className="text-lg text-muted-foreground">Tu Saldo</p>
+                <div className="flex items-center justify-center gap-2 mt-1">
+                    <Gem className="h-6 w-6 text-primary" />
+                    <span className="text-3xl font-bold text-primary-foreground">150</span>
                 </div>
-              ) : learningPath && learningPath.recommendedPath.length > 0 ? (
-                  <div className="text-sm text-muted-foreground space-y-3">
-                    <p>{learningPath.introduction}</p>
-                    <div className='space-y-2'>
-                      <p className='font-bold text-primary-foreground flex items-center gap-2'><Sparkles className='text-accent'/> Tu Senda Recomendada:</p>
-                      <ul className='list-decimal list-inside pl-2 space-y-1'>
-                        {learningPath.recommendedPath.map(step => {
-                          const kingdom = kingdoms.find(k => k.id === step.kingdomId);
-                          return (
-                            <li key={step.kingdomId} className='text-xs'>
-                              <span className='font-semibold'>{kingdom?.name || step.kingdomId}</span>: {step.reason}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </div>
-                  </div>
-              ) : (
-                <p className="text-sm text-muted-foreground mb-4">
-                  Elige un reino para comenzar tu aventura. El mago te guiará cuando inicies una misión.
-                </p>
-              )}
+                 <Button className="w-full mt-4">Comprar Gemas</Button>
             </CardContent>
         </Card>
+
+        <div className="space-y-4">
+            <h3 className="text-lg font-bold text-center text-primary-foreground">Planes de Suscripción</h3>
+            <SubscriptionCard 
+                title="Plan Aprendiz"
+                price="S/ 10"
+                features={["Acceso a misiones básicas", "Soporte en el gremio"]}
+            />
+            <SubscriptionCard 
+                title="Plan Caballero"
+                price="S/ 18"
+                features={["Acceso a todas las misiones", "Misiones de Gremio semanales", "Personalización de perfil"]}
+                recommended
+            />
+            <SubscriptionCard 
+                title="Plan Élite"
+                price="S/ 25"
+                features={["Todos los beneficios de Caballero", "Acceso anticipado a Reinos", "Recompensas de temporada exclusivas"]}
+            />
+        </div>
       </aside>
     </div>
   );
 }
+
+    

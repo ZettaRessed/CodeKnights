@@ -26,13 +26,16 @@ export default function MissionPage({ params }: { params: { slug: string } }) {
     const timeout = setTimeout(() => {
       setSrcDoc(`
         <html>
+          <head>
+            <style>
+              body { 
+                color: #333;
+                font-family: sans-serif;
+                padding: 1rem;
+              }
+            </style>
+          </head>
           <body>${code}</body>
-          <style>
-            body { 
-              color: #333;
-              font-family: sans-serif;
-            }
-          </style>
         </html>
       `);
     }, 250);

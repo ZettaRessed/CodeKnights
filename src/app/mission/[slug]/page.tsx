@@ -2,26 +2,16 @@
 import { useState, useEffect } from 'react';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { missions } from '@/lib/missions';
+import { missions, Mission } from '@/lib/missions';
 import './mission.css';
 import { CheckCircle, Gem, Sparkles, Trophy, Flag, BookOpen, FileCode, Eye, ChevronLeft } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 
-export default function MissionPage({ params }: { params: { slug: string } }) {
-  const [code, setCode] = useState('');
+function MissionClientWrapper({ mission }: { mission: Mission }) {
+  const [code, setCode] = useState(mission.starterCode);
   const [srcDoc, setSrcDoc] = useState('');
 
-  const mission = missions.find((m) => m.slug === params.slug);
-
-  useEffect(() => {
-    if (mission) {
-      setCode(mission.starterCode);
-    }
-  }, [mission]);
-  
   useEffect(() => {
     const timeout = setTimeout(() => {
       setSrcDoc(`
@@ -43,15 +33,10 @@ export default function MissionPage({ params }: { params: { slug: string } }) {
     return () => clearTimeout(timeout);
   }, [code]);
 
-  if (!mission) {
-    notFound();
-  }
-  
   const handleCompleteMission = () => {
     // Logic to verify mission completion
     alert('¡Misión Completada! (Simulación)');
   };
-
 
   return (
     <div className="flex h-screen w-full flex-col font-headline bg-background dark:bg-black/40 p-4 gap-4">
@@ -137,4 +122,15 @@ export default function MissionPage({ params }: { params: { slug: string } }) {
       </main>
     </div>
   );
+}
+
+
+export default function MissionPage({ params }: { params: { slug: string } }) {
+  const mission = missions.find((m) => m.slug === params.slug);
+
+  if (!mission) {
+    notFound();
+  }
+
+  return <MissionClientWrapper mission={mission} />;
 }

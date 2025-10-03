@@ -47,6 +47,42 @@
       "description": "A knight kneeling and taking an oath with a sword.",
       "imageUrl": "https://images.unsplash.com/photo-1599491873022-35338fac355c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxrbmlnaHQlMjBrbmVlbGluZ3xlbnwwfHx8fDE3NTk0MjQ3NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "knight kneeling"
+    },
+    {
+      "id": "king-tim-presenting",
+      "description": "King Tim Berners-Lee presenting.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freyes%2FTim%20Berners-Lee%20HTML%2FPresentacion.png?alt=media&token=0924e3fe-c96a-4a8f-8920-a053723475c4",
+      "imageHint": "king tim berners-lee"
+    },
+    {
+      "id": "king-tim-default",
+      "description": "King Tim Berners-Lee default pose.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freyes%2FTim%20Berners-Lee%20HTML%2FPredeterminado.png?alt=media&token=21291b88-e94b-4638-831e-57e56f9670d2",
+      "imageHint": "king tim berners-lee"
+    },
+    {
+      "id": "king-tim-surprised",
+      "description": "King Tim Berners-Lee surprised.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freyes%2FTim%20Berners-Lee%20HTML%2FSorprendido.png?alt=media&token=96f2aca9-c544-4216-b7a1-f189fff49f33",
+      "imageHint": "king tim berners-lee surprised"
+    },
+    {
+      "id": "king-tim-confused",
+      "description": "King Tim Berners-Lee confused.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freyes%2FTim%20Berners-Lee%20HTML%2FNo%20se.png?alt=media&token=477da981-7824-4887-8d7e-ec50fbd64532",
+      "imageHint": "king tim berners-lee confused"
+    },
+    {
+      "id": "king-tim-angry",
+      "description": "King Tim Berners-Lee angry.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freyes%2FTim%20Berners-Lee%20HTML%2FEnojado.png?alt=media&token=ff1e4d1b-cb76-4a93-9841-0c705afac938",
+      "imageHint": "king tim berners-lee angry"
+    },
+    {
+      "id": "king-tim-clapping",
+      "description": "King Tim Berners-Lee clapping.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/codeknights-313d5.firebasestorage.app/o/public%2Freyes%2FTim%20Berners-Lee%20HTML%2FAplausos.png?alt=media&token=13834719-232f-4bf5-bab2-4448969c77b5",
+      "imageHint": "king tim berners-lee clapping"
     }
   ]
 }

@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { type Mission, type TriviaQuestion, missions } from '@/lib/missions';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import './mission.css';
-import { Check, CheckCircle, Gem, Sparkles, Trophy, Flag, BookOpen, FileCode, Eye, ChevronLeft, X } from 'lucide-react';
+import { Check, CheckCircle, Gem, Sparkles, Trophy, Flag, BookOpen, FileCode, Eye, ChevronLeft, X, Play } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,6 +26,7 @@ const kingExpressions: Record<KingExpression, string> = {
 
 export default function MissionClientWrapper({ mission }: { mission: Mission }) {
   const [code, setCode] = useState(mission.starterCode || '');
+  const [executedCode, setExecutedCode] = useState('');
   const [srcDoc, setSrcDoc] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -36,34 +37,13 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   useEffect(() => {
     // Reset state when mission changes
     setCode(mission.starterCode || '');
+    setExecutedCode('');
     setSrcDoc('');
     setSelectedAnswer(null);
     setIsCorrect(null);
     setKingExpression('presenting');
     setKingDialogue(mission.kingDialogue?.intro || '');
   }, [mission]);
-
-  useEffect(() => {
-    if (mission.type === 'code') {
-      const timeout = setTimeout(() => {
-        setSrcDoc(`
-          <html>
-            <head>
-              <style>
-                body { 
-                  color: #333;
-                  font-family: sans-serif;
-                  padding: 1rem;
-                }
-              </style>
-            </head>
-            <body>${code}</body>
-          </html>
-        `);
-      }, 250);
-      return () => clearTimeout(timeout);
-    }
-  }, [code, mission.type]);
   
   useEffect(() => {
     if (isCorrect === true) {
@@ -74,6 +54,31 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
       setKingDialogue(mission.kingDialogue?.failure || 'Inténtalo de nuevo.');
     }
   }, [isCorrect, mission.kingDialogue]);
+
+
+  useEffect(() => {
+    if (mission.type === 'code') {
+      const timeout = setTimeout(() => {
+        setSrcDoc(`
+          <html>
+            <body>${executedCode}</body>
+            <style>
+              body { 
+                color: #333;
+                font-family: sans-serif;
+                padding: 1rem;
+              }
+            </style>
+          </html>
+        `);
+      }, 250);
+      return () => clearTimeout(timeout);
+    }
+  }, [executedCode, mission.type]);
+
+  const handleExecuteCode = () => {
+    setExecutedCode(code);
+  };
 
 
   const handleCompleteMission = () => {
@@ -189,43 +194,50 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     // Default to code challenge
     return (
         <div className="mission-panel-grid">
-             {/* Objectives Panel */}
+             {/* Top Row */}
             <div className="mission-panel flex flex-col gap-6">
-            <div>
-                <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
-                <p className="text-muted-foreground mt-2">{mission.summary}</p>
+                <KingPanel />
             </div>
             
-            <div className="space-y-4">
-                {mission.objectives.map((obj, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                        <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
-                        <p className="text-sm text-primary-foreground">{obj}</p>
-                    </div>
-                ))}
-            </div>
-
-            {mission.lore && (
+            <div className="mission-panel flex flex-col gap-6">
                 <div>
-                <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
-                <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
+                    <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
+                    <p className="text-muted-foreground mt-2">{mission.summary}</p>
                 </div>
-            )}
+                
+                <div className="space-y-4">
+                    {mission.objectives.map((obj, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                            <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
+                            <p className="text-sm text-primary-foreground">{obj}</p>
+                        </div>
+                    ))}
+                </div>
+
+                {mission.lore && (
+                    <div>
+                    <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
+                    <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
+                    </div>
+                )}
             </div>
             
-            {/* Code Editor Panel */}
+            {/* Bottom Row */}
             <div className="mission-panel flex flex-col">
                 <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
                 <Textarea
-                id="code-editor"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="flex-grow font-code"
-                placeholder="Escribe tu código aquí..."
+                    id="code-editor"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    className="flex-grow font-code"
+                    placeholder="Escribe tu código aquí..."
                 />
+                <Button onClick={handleExecuteCode} className="mt-2">
+                    <Play className="mr-2 h-4 w-4" />
+                    Ejecutar Código
+                </Button>
             </div>
 
-            {/* Preview Panel */}
             <div className="mission-panel flex flex-col">
                 <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
                 <div className='flex-grow bg-white rounded-md'>
@@ -246,8 +258,71 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
       <MissionHeader />
 
       <main className="flex-1 mission-grid-narrative overflow-hidden">
-        <KingPanel />
-        <ChallengePanel />
+        
+        {mission.type === 'code' ? (
+             <div className="mission-panel-grid">
+                {/* Top Row */}
+                <div className="mission-panel flex flex-col gap-6 justify-center">
+                    <KingPanel />
+                </div>
+                <div className="mission-panel flex flex-col gap-6">
+                    <div>
+                        <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
+                        <p className="text-muted-foreground mt-2">{mission.description}</p>
+                    </div>
+                    
+                    <div className="space-y-4">
+                        {mission.objectives.map((obj, index) => (
+                            <div key={index} className="flex items-start gap-3">
+                                <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
+                                <p className="text-sm text-primary-foreground">{obj}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {mission.lore && (
+                        <div>
+                        <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
+                        <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
+                        </div>
+                    )}
+                </div>
+                
+                {/* Bottom Row */}
+                <div className="mission-panel flex flex-col">
+                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
+                    <Textarea
+                        id="code-editor"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        className="flex-grow font-code"
+                        placeholder="Escribe tu código aquí..."
+                    />
+                     <Button onClick={handleExecuteCode} className="mt-2">
+                        <Play className="mr-2 h-4 w-4" />
+                        Ejecutar Código
+                    </Button>
+                </div>
+
+                <div className="mission-panel flex flex-col">
+                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
+                    <div className='flex-grow bg-white rounded-md'>
+                        <iframe
+                            srcDoc={srcDoc}
+                            title="output"
+                            sandbox="allow-scripts"
+                            className="preview-frame"
+                        />
+                    </div>
+                </div>
+            </div>
+        ) : (
+             <div className="mission-grid-narrative">
+                <KingPanel />
+                <ChallengePanel />
+            </div>
+        )}
+
       </main>
     </div>
   );

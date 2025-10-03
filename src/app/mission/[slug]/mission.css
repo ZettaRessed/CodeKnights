@@ -6,9 +6,9 @@
     overflow: hidden;
 }
 
-.mission-panel-grid {
+.mission-grid-code {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto 1fr;
     gap: 1rem;
     height: 100%;

@@ -170,7 +170,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   );
   
   const KingPanel = () => (
-    <div className="mission-panel king-panel">
+    <div className="king-panel">
         <div className="relative w-full h-64 mb-4">
              <Image src={kingExpressions[kingExpression]} alt={`Rey Tim Berners-Lee - ${kingExpression}`} layout="fill" objectFit="contain" />
         </div>
@@ -180,6 +180,62 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
             </CardContent>
         </Card>
     </div>
+  );
+
+  const ObjectivesPanel = () => (
+    <>
+      <div>
+        <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
+        <p className="text-muted-foreground mt-2">{mission.summary}</p>
+      </div>
+      
+      <div className="space-y-4 mt-4">
+        {mission.objectives.map((obj, index) => (
+            <div key={index} className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
+                <p className="text-sm text-primary-foreground">{obj}</p>
+            </div>
+        ))}
+      </div>
+
+      {mission.lore && (
+          <div className="mt-4">
+          <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
+          <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
+          </div>
+      )}
+    </>
+  );
+
+  const EditorPanel = () => (
+    <>
+      <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
+      <Textarea
+          id="code-editor"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          className="flex-grow font-code"
+          placeholder="Escribe tu código aquí..."
+      />
+      <Button onClick={handleExecuteCode} className="mt-2">
+          <Play className="mr-2 h-4 w-4" />
+          Ejecutar Código
+      </Button>
+    </>
+  );
+
+  const VisualizerPanel = () => (
+    <>
+      <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
+      <div className='flex-grow bg-white rounded-md'>
+          <iframe
+              srcDoc={srcDoc}
+              title="output"
+              sandbox="allow-scripts"
+              className="preview-frame"
+          />
+      </div>
+    </>
   );
 
   const ChallengePanel = () => {
@@ -260,93 +316,53 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     <div className="flex h-screen w-full flex-col font-headline bg-background dark:bg-black/40 p-4 gap-4">
       <MissionHeader />
 
-      <main className="flex-1 grid overflow-hidden mission-grid-narrative">
-        
+      <main className={cn(
+        'flex-1 grid overflow-hidden',
+        mission.type === 'code' ? 'mission-grid-code' : 'mission-grid-narrative'
+      )}>
         {mission.type === 'code' ? (
-             <div className="mission-panel-grid">
-                <div className="mission-panel">
-                    <KingPanel />
-                </div>
-                
-                <div className="mission-panel">
-                    <div>
-                        <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
-                        <p className="text-muted-foreground mt-2">{mission.summary}</p>
-                    </div>
-                    
-                    <div className="space-y-4 mt-4">
-                        {mission.objectives.map((obj, index) => (
-                            <div key={index} className="flex items-start gap-3">
-                                <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
-                                <p className="text-sm text-primary-foreground">{obj}</p>
-                            </div>
-                        ))}
-                    </div>
-
-                    {mission.lore && (
-                        <div className="mt-4">
-                        <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
-                        <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
-                        </div>
-                    )}
-                </div>
-                
-                <div className="col-span-2 flex gap-4 min-h-0">
-                    <div className="mission-panel flex flex-col w-1/2">
-                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
-                        <Textarea
-                            id="code-editor"
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            className="flex-grow font-code"
-                            placeholder="Escribe tu código aquí..."
-                        />
-                        <Button onClick={handleExecuteCode} className="mt-2">
-                            <Play className="mr-2 h-4 w-4" />
-                            Ejecutar Código
-                        </Button>
-                    </div>
-
-                    <div className="mission-panel flex flex-col w-1/2">
-                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
-                        <div className='flex-grow bg-white rounded-md'>
-                            <iframe
-                                srcDoc={srcDoc}
-                                title="output"
-                                sandbox="allow-scripts"
-                                className="preview-frame"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                {isCorrect !== null && (
-                    <div className="col-span-2 mt-4 text-center bg-card/80 p-4 rounded-lg border border-primary/20">
-                        <h3 className={cn("text-2xl font-bold", isCorrect ? "text-accent" : "text-destructive-foreground")}>
-                            {isCorrect ? "¡Código Correcto!" : "Código Incorrecto"}
-                        </h3>
-                        <p className="text-muted-foreground mt-2">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
-                        {isCorrect ? (
-                            <Button onClick={handleNextMission} className="mt-4">
-                                Continuar
-                            </Button>
-                        ) : (
-                           <div className="mt-4 flex justify-center gap-4">
-                                <Button variant="outline" onClick={handleExecuteCode}>
-                                    <RefreshCw className="mr-2"/> Reintentar
-                                </Button>
-                            </div>
-                        )}
-                    </div>
-                 )}
-            </div>
-        ) : (
-            <>
+          <>
+            <div className="mission-panel">
               <KingPanel />
-              <ChallengePanel />
-            </>
+            </div>
+            <div className="mission-panel">
+              <ObjectivesPanel />
+            </div>
+            <div className="mission-panel">
+              <EditorPanel />
+            </div>
+            <div className="mission-panel">
+              <VisualizerPanel />
+            </div>
+            
+            {isCorrect !== null && (
+              <div className="col-span-2 mt-4 text-center bg-card/80 p-4 rounded-lg border border-primary/20">
+                  <h3 className={cn("text-2xl font-bold", isCorrect ? "text-accent" : "text-destructive-foreground")}>
+                      {isCorrect ? "¡Código Correcto!" : "Código Incorrecto"}
+                  </h3>
+                  <p className="text-muted-foreground mt-2">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
+                  {isCorrect ? (
+                      <Button onClick={handleNextMission} className="mt-4">
+                          Continuar
+                      </Button>
+                  ) : (
+                      <div className="mt-4 flex justify-center gap-4">
+                          <Button variant="outline" onClick={handleExecuteCode}>
+                              <RefreshCw className="mr-2"/> Reintentar
+                          </Button>
+                      </div>
+                  )}
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="mission-panel">
+              <KingPanel />
+            </div>
+            <ChallengePanel />
+          </>
         )}
-
       </main>
     </div>
   );

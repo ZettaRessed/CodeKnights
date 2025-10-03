@@ -60,11 +60,3 @@
     background-color: white;
     border-radius: var(--radius);
 }
-
-.mission-panel .flex-grow {
-    flex-grow: 1;
-}
-
-.mission-panel > button {
-    flex-shrink: 0;
-}

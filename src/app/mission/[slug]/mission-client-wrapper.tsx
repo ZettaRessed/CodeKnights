@@ -268,13 +268,13 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                     <KingPanel />
                 </div>
                 
-                <div className="mission-panel flex flex-col gap-4">
+                <div className="mission-panel">
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
                         <p className="text-muted-foreground mt-2">{mission.summary}</p>
                     </div>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-4 mt-4">
                         {mission.objectives.map((obj, index) => (
                             <div key={index} className="flex items-start gap-3">
                                 <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
@@ -284,37 +284,39 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                     </div>
 
                     {mission.lore && (
-                        <div>
+                        <div className="mt-4">
                         <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
                         <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
                         </div>
                     )}
                 </div>
                 
-                <div className="mission-panel flex flex-col">
-                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
-                    <Textarea
-                        id="code-editor"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        className="flex-grow font-code"
-                        placeholder="Escribe tu código aquí..."
-                    />
-                    <Button onClick={handleExecuteCode} className="mt-2">
-                        <Play className="mr-2 h-4 w-4" />
-                        Ejecutar Código
-                    </Button>
-                </div>
-
-                <div className="mission-panel flex flex-col">
-                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
-                    <div className='flex-grow bg-white rounded-md'>
-                        <iframe
-                            srcDoc={srcDoc}
-                            title="output"
-                            sandbox="allow-scripts"
-                            className="preview-frame"
+                <div className="col-span-2 flex gap-4 min-h-0">
+                    <div className="mission-panel flex flex-col w-1/2">
+                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
+                        <Textarea
+                            id="code-editor"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            className="flex-grow font-code"
+                            placeholder="Escribe tu código aquí..."
                         />
+                        <Button onClick={handleExecuteCode} className="mt-2">
+                            <Play className="mr-2 h-4 w-4" />
+                            Ejecutar Código
+                        </Button>
+                    </div>
+
+                    <div className="mission-panel flex flex-col w-1/2">
+                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
+                        <div className='flex-grow bg-white rounded-md'>
+                            <iframe
+                                srcDoc={srcDoc}
+                                title="output"
+                                sandbox="allow-scripts"
+                                className="preview-frame"
+                            />
+                        </div>
                     </div>
                 </div>
 

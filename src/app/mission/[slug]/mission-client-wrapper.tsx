@@ -94,10 +94,8 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   const handleExecuteCode = () => {
     setExecutedCode(code);
     if (mission.type === 'code' && mission.challenge.solution) {
-      // A more robust solution would involve parsing and comparing abstract syntax trees (AST)
-      // For now, let's normalize strings to handle whitespace differences.
-      const solutionNormalized = mission.challenge.solution.replace(/\s+/g, '').trim();
-      const userCodeNormalized = code.replace(/\s+/g, '').trim();
+      const solutionNormalized = normalizeHtml(mission.challenge.solution);
+      const userCodeNormalized = normalizeHtml(code);
       setIsCorrect(userCodeNormalized === solutionNormalized);
     }
   };
@@ -345,10 +343,10 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                  )}
             </div>
         ) : (
-             <div className="mission-grid-narrative">
-                <KingPanel />
-                <ChallengePanel />
-            </div>
+            <>
+              <KingPanel />
+              <ChallengePanel />
+            </>
         )}
 
       </main>

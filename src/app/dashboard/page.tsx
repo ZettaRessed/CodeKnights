@@ -13,6 +13,12 @@ import {
   CardTitle,
   CardFooter
 } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Progress } from '@/components/ui/progress';
 import {
   BookMarked,
@@ -53,7 +59,7 @@ import './map.css';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { missions, kingdoms as missionKingdoms } from '@/lib/missions';
+import { missions, missionKingdoms } from '@/lib/missions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -84,7 +90,8 @@ const kingdoms = [
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [character, setCharacter] = useState<{class: CharacterClass, experience: string} | null>(null);
-  
+  const [selectedKingdom, setSelectedKingdom] = useState<(typeof kingdoms[0]) | null>(null);
+
   const auth = getAuth(app);
 
   useEffect(() => {
@@ -139,11 +146,11 @@ export default function DashboardPage() {
     if (!kingdomData) return null;
   
     const completedMissions = 2; // Simulation
-    const totalMissions = kingdomData.missions.length;
-    const progress = (completedMissions / totalMissions) * 100;
+    const totalMissions = kingdomData.levels.reduce((acc, level) => acc + level.missions.length, 0);
+    const progress = totalMissions > 0 ? (completedMissions / totalMissions) * 100 : 0;
   
     return (
-      <DialogContent className="max-w-2xl bg-card/90 backdrop-blur-sm border-primary/20">
+      <DialogContent className="max-w-3xl bg-card/90 backdrop-blur-sm border-primary/20">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-primary-foreground">{kingdom.name}</DialogTitle>
           <DialogDescription>{kingdom.description}</DialogDescription>
@@ -155,54 +162,65 @@ export default function DashboardPage() {
           </div>
           <Progress value={progress} className="h-2" />
         </div>
-        <ScrollArea className="h-[50vh]">
-          <div className="space-y-4 pr-6">
-            {kingdomData.missions.map((missionSlug, index) => {
-              const mission = missions.find(m => m.slug === missionSlug);
-              if (!mission) return null;
-              const isCompleted = index < completedMissions;
-  
-              return (
-                <Card key={mission.slug} className="bg-background/70 border-primary/10">
-                  <CardHeader className='pb-4'>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg text-primary-foreground">{mission.title}</CardTitle>
-                        <CardDescription>{mission.description}</CardDescription>
-                      </div>
-                      {isCompleted ? (
-                        <Badge variant="outline" className='border-green-500 text-green-500'>
-                          <CheckCircle className="h-3 w-3 mr-1" />
-                          Completado
-                        </Badge>
-                      ) : (
-                         <Badge variant="outline" className='border-amber-500 text-amber-500'>
-                          Pendiente
-                        </Badge>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex justify-between items-center pb-4">
-                     <div className="flex gap-4">
-                        <div className="flex items-center gap-2 text-accent">
-                            <Gem className="h-4 w-4" />
-                            <span className="font-bold text-sm">{mission.rewards.gems} Gemas</span>
-                        </div>
-                         <div className="flex items-center gap-2 text-primary">
-                            <Sparkles className="h-4 w-4" />
-                            <span className="font-bold text-sm">{mission.rewards.xp} XP</span>
-                        </div>
-                    </div>
-                    <Button asChild size="sm">
-                      <Link href={`/mission/${mission.slug}`}>
-                        {isCompleted ? "Repasar" : "Empezar"} <ChevronRight className="h-4 w-4 ml-2" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+        <ScrollArea className="h-[60vh]">
+          <Accordion type="single" collapsible defaultValue="level-1" className="w-full">
+            {kingdomData.levels.map((level, levelIndex) => (
+              <AccordionItem value={`level-${levelIndex + 1}`} key={levelIndex}>
+                <AccordionTrigger className="text-xl font-bold text-accent">
+                  {level.title}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4 pr-6">
+                    {level.missions.map((missionSlug, missionIndex) => {
+                      const mission = missions.find(m => m.slug === missionSlug);
+                      if (!mission) return null;
+                      const isCompleted = missionIndex < completedMissions; // Simulation
+        
+                      return (
+                        <Card key={mission.slug} className="bg-background/70 border-primary/10">
+                          <CardHeader className='pb-4'>
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <CardTitle className="text-lg text-primary-foreground">{mission.title}</CardTitle>
+                                <CardDescription>{mission.description}</CardDescription>
+                              </div>
+                              {isCompleted ? (
+                                <Badge variant="outline" className='border-green-500 text-green-500'>
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  Completado
+                                </Badge>
+                              ) : (
+                                 <Badge variant="outline" className='border-amber-500 text-amber-500'>
+                                  Pendiente
+                                </Badge>
+                              )}
+                            </div>
+                          </CardHeader>
+                          <CardContent className="flex justify-between items-center pb-4">
+                             <div className="flex gap-4">
+                                <div className="flex items-center gap-2 text-accent">
+                                    <Gem className="h-4 w-4" />
+                                    <span className="font-bold text-sm">{mission.rewards.gems} Gemas</span>
+                                </div>
+                                 <div className="flex items-center gap-2 text-primary">
+                                    <Sparkles className="h-4 w-4" />
+                                    <span className="font-bold text-sm">{mission.rewards.xp} XP</span>
+                                </div>
+                            </div>
+                            <Button asChild size="sm">
+                              <Link href={`/mission/${mission.slug}`}>
+                                {isCompleted ? "Repasar" : "Empezar"} <ChevronRight className="h-4 w-4 ml-2" />
+                              </Link>
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </ScrollArea>
       </DialogContent>
     );
@@ -220,7 +238,7 @@ export default function DashboardPage() {
       <div className="absolute inset-0 bg-black/30 z-10"></div>
       
       <TooltipProvider>
-        <Dialog>
+        <Dialog open={!!selectedKingdom} onOpenChange={(isOpen) => !isOpen && setSelectedKingdom(null)}>
             {kingdoms.map(kingdom => (
               <Tooltip key={kingdom.id} delayDuration={100}>
                 <TooltipTrigger asChild>
@@ -228,6 +246,7 @@ export default function DashboardPage() {
                     <div 
                       className="absolute z-20 cursor-pointer"
                       style={{ top: kingdom.position.top, left: kingdom.position.left, transform: 'translate(-50%, -50%)' }}
+                      onClick={() => setSelectedKingdom(kingdom)}
                     >
                       <div className="kingdom-node">
                         <kingdom.icon />
@@ -241,10 +260,7 @@ export default function DashboardPage() {
                 </TooltipContent>
               </Tooltip>
             ))}
-            {/* This assumes we have a way to set which kingdom is selected to show the modal */}
-            {/* A real implementation would need state to manage the selectedKingdom for the Dialog */}
-            {/* For now, let's render one for the first kingdom to demonstrate */}
-            <KingdomMissionsModal kingdom={kingdoms[0]}/>
+            {selectedKingdom && <KingdomMissionsModal kingdom={selectedKingdom} />}
         </Dialog>
       </TooltipProvider>
     </div>

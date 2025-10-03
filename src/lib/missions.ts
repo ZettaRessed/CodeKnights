@@ -36,15 +36,27 @@ export const missions: Mission[] = [
   // Future missions from other kingdoms will be added here
 ];
 
-export const kingdoms = {
+type MissionKingdom = {
+  levels: {
+    title: string;
+    missions: string[];
+  }[];
+}
+
+export const missionKingdoms: Record<string, MissionKingdom> = {
   'html-css': {
-    missions: ['html-m1-1', 'html-m1-2', 'html-m1-3', 'html-m1-4', 'html-m1-5'],
+    levels: [
+      {
+        title: 'Nivel 1: Las Puertas del Reino',
+        missions: ['html-m1-1', 'html-m1-2', 'html-m1-3', 'html-m1-4', 'html-m1-5'],
+      }
+    ]
   },
   'javascript': {
-    missions: [],
+    levels: [],
   },
   'python': {
-    missions: [],
+    levels: [],
   }
 }
 

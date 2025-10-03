@@ -80,13 +80,7 @@ export const htmlMissions: Mission[] = [
       failure: 'Hmm, algo no está del todo bien. Revisa la estructura fundamental. Todo reino necesita una declaración, un contenedor, una mente y un cuerpo, en ese orden.'
     },
     challenge: {
-      solution: `<!DOCTYPE html>
-<html>
-  <head>
-  </head>
-  <body>
-  </body>
-</html>`,
+      solution: `<!DOCTYPE html>\n<html>\n  <head>\n  </head>\n  <body>\n  </body>\n</html>`,
     },
     starterCode: '<!DOCTYPE html>\n',
     objectives: [
@@ -116,23 +110,9 @@ export const htmlMissions: Mission[] = [
       failure: 'Casi lo tienes, pero el estandarte sigue en el lugar incorrecto. Recuerda, el nombre de un dominio es un secreto que se guarda en la mente (<head>).'
     },
     challenge: {
-      solution: `<!DOCTYPE html>
-<html>
-  <head>
-    <title>Mi Fortaleza</title>
-  </head>
-  <body>
-  </body>
-</html>`,
+      solution: `<!DOCTYPE html>\n<html>\n  <head>\n    <title>Mi Fortaleza</title>\n  </head>\n  <body>\n  </body>\n</html>`,
     },
-    starterCode: `<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-  <title>Mi Fortaleza</title>
-</body>
-</html>`,
+    starterCode: `<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n  <title>Mi Fortaleza</title>\n</body>\n</html>`,
     objectives: [
       'Mueve la etiqueta <title> de la sección <body> a la sección <head>.',
     ],
@@ -168,4 +148,149 @@ export const htmlMissions: Mission[] = [
     objectives: [],
     achievement: 'La Voz del Rey',
   },
+  // Nivel 2
+  {
+    slug: 'html-m2-1',
+    title: 'La Jerarquía del Poder',
+    description: 'Nivel 2: El Sendero de los Escribas',
+    summary: 'Aprende a usar la jerarquía de encabezados de <h1> a <h6>.',
+    kingdomId: 'html-css',
+    level: 2,
+    mission: 1,
+    type: 'trivia',
+    rewards: {
+      gems: 10,
+      xp: 20,
+    },
+    kingDialogue: {
+      intro: "No todas las proclamaciones tienen el mismo peso. Un buen líder sabe usar una jerarquía, desde <h1> hasta <h6>. Cuanto mayor el número, menor la importancia.",
+      success: "Exacto. <h6> es para las notas más finas, los detalles. Comprender la jerarquía es fundamental para la claridad.",
+      failure: "No es correcto. Recuerda, a mayor número, menor es la importancia en la jerarquía de los escribas.",
+    },
+    challenge: {
+        question: '¿Qué etiqueta representa el encabezado de menor importancia?',
+        options: ['<h2>', '<h4>', '<h6>'],
+        correctAnswer: '<h6>',
+    },
+    achievement: 'Maestro de la Jerarquía',
+    objectives: [],
+  },
+  {
+    slug: 'html-m2-2',
+    title: 'Las Crónicas del Pueblo',
+    description: 'Nivel 2: El Sendero de los Escribas',
+    summary: 'Utiliza la etiqueta de párrafo para añadir texto.',
+    kingdomId: 'html-css',
+    level: 2,
+    mission: 2,
+    type: 'code',
+    rewards: {
+      gems: 10,
+      xp: 20,
+    },
+    kingDialogue: {
+      intro: "Los encabezados son los huesos, pero las crónicas son la carne. Para escribir las historias, los detalles y las descripciones, usamos la runa del párrafo.",
+      success: "Tus palabras fluyen con la estructura correcta. Has dado vida a la crónica. Sigue así.",
+      failure: "El pergamino aún espera la crónica. Asegúrate de usar la runa <p> correctamente.",
+    },
+    challenge: {
+      solution: `<h1>La Leyenda de CodeKnights</h1>\n<p>Un caballero debe forjar su destino con líneas de código.</p>`,
+    },
+    starterCode: `<h1>La Leyenda de CodeKnights</h1>`,
+    objectives: [
+      'Debajo del <h1>, añade una etiqueta <p>.',
+      'Dentro del <p>, escribe el texto: "Un caballero debe forjar su destino con líneas de código."',
+    ],
+    lore: 'La etiqueta <p> se utiliza para definir párrafos de texto, la unidad básica para escribir contenido en la web.',
+    achievement: 'Cronista del Reino',
+  },
+  {
+    slug: 'html-m2-3',
+    title: 'La Fuerza de la Palabra',
+    description: 'Nivel 2: El Sendero de los Escribas',
+    summary: 'Aprende a dar importancia semántica con <strong>.',
+    kingdomId: 'html-css',
+    level: 2,
+    mission: 3,
+    type: 'code',
+    rewards: {
+      gems: 15,
+      xp: 25,
+    },
+    kingDialogue: {
+      intro: "A veces, una palabra debe golpear con la fuerza de un martillo. Para eso, la envolvemos en la runa de la importancia <strong>. El siguiente código intenta enfatizar la palabra \"nunca\", pero usa una runa obsoleta de los tiempos oscuros. Reemplázala con la correcta.",
+      success: "Bien visto. La runa <b> es del pasado; solo afecta la apariencia. <strong> le da un significado semántico de importancia. Tu código ahora no solo se ve fuerte, es fuerte.",
+      failure: "La runa incorrecta sigue presente. Busca la runa de los tiempos oscuros y reemplázala por la de la verdadera fuerza.",
+    },
+    challenge: {
+      solution: `<p>Un caballero <strong>nunca</strong> se rinde.</p>`,
+    },
+    starterCode: `<p>Un caballero <b>nunca</b> se rinde.</p>`,
+    objectives: [
+        'Reemplaza la etiqueta de apertura <b> por <strong>.',
+        'Reemplaza la etiqueta de cierre </b> por </strong>.'
+    ],
+    lore: 'Mientras que <b> y <strong> hacen que el texto se vea en negrita por defecto, <strong> indica a los navegadores y lectores de pantalla que el texto es importante.',
+    achievement: 'Forjador de Palabras',
+  },
+  {
+    slug: 'html-m2-4',
+    title: 'El Susurro del Énfasis',
+    description: 'Nivel 2: El Sendero de los Escribas',
+    summary: 'Aprende a enfatizar texto con <em>.',
+    kingdomId: 'html-css',
+    level: 2,
+    mission: 4,
+    type: 'trivia',
+    rewards: {
+      gems: 15,
+      xp: 25,
+    },
+    kingDialogue: {
+      intro: "Así como hay gritos de guerra, hay susurros de estrategia. La runa <em> da un énfasis sutil, cambiando el tono de la frase.",
+      success: "Has captado la esencia. <em> es para el énfasis, no para la decoración. Es la diferencia entre un herrero y un artista del código.",
+      failure: "No has interpretado el susurro correctamente. El énfasis no es solo apariencia, es intención.",
+    },
+    challenge: {
+        question: '¿Cuál es el propósito del código <p>El código es <em>arte</em>.</p>?',
+        options: [
+            'Hacer que la palabra "arte" sea más grande.',
+            'Indicar que la palabra "arte" debe ser leída con un énfasis especial.',
+            'Poner la palabra "arte" en cursiva por razones puramente decorativas.'
+        ],
+        correctAnswer: 'Indicar que la palabra "arte" debe ser leída con un énfasis especial.',
+    },
+    achievement: 'El Susurro del Sabio',
+    objectives: [],
+  },
+  {
+    slug: 'html-m2-5',
+    title: 'El Inventario del Armero',
+    description: 'Nivel 2: El Sendero de los Escribas',
+    summary: 'Crea una lista no ordenada con <ul> y <li>.',
+    kingdomId: 'html-css',
+    level: 2,
+    mission: 5,
+    type: 'trivia',
+    rewards: {
+      gems: 20,
+      xp: 30,
+    },
+    kingDialogue: {
+      intro: "Un caballero debe mantener su equipo en orden. Para listar objetos donde la secuencia no importa, usamos una lista no ordenada. Ordena las siguientes runas para crear una lista de inventario con los objetos \"Espada\" y \"Escudo\".",
+      success: "Una lista impecable. <ul> agrupa y <li> define cada objeto. La organización es el primer paso hacia la victoria en cualquier batalla de código.",
+      failure: "El inventario está en desorden. Recuerda, cada objeto debe tener su propia runa y estar contenido dentro del saco de la lista.",
+    },
+    challenge: {
+        question: 'Ordena las siguientes runas para crear una lista con "Espada" y "Escudo":',
+        options: [
+            '<ul><li>Espada</li><li>Escudo</li></ul>',
+            '<li><ul>Espada</ul><ul>Escudo</ul></li>',
+            '<ul><p>Espada</p><p>Escudo</p></ul>'
+        ],
+        correctAnswer: '<ul><li>Espada</li><li>Escudo</li></ul>',
+    },
+    achievement: 'Maestro de Inventarios',
+    objectives: [],
+  }
 ];

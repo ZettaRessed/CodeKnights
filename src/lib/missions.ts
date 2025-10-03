@@ -49,6 +49,10 @@ export const missionKingdoms: Record<string, MissionKingdom> = {
       {
         title: 'Nivel 1: Las Puertas del Reino',
         missions: ['html-m1-1', 'html-m1-2', 'html-m1-3', 'html-m1-4', 'html-m1-5'],
+      },
+      {
+        title: 'Nivel 2: El Sendero de los Escribas',
+        missions: ['html-m2-1', 'html-m2-2', 'html-m2-3', 'html-m2-4', 'html-m2-5'],
       }
     ]
   },
@@ -59,5 +63,3 @@ export const missionKingdoms: Record<string, MissionKingdom> = {
     levels: [],
   }
 }
-
-    

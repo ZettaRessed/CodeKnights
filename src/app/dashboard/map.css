@@ -57,3 +57,63 @@
         transform: scale(1.1);
     }
 }
+
+
+.mission-path-container {
+    padding: 1rem 0;
+    position: relative;
+    width: 100%;
+}
+
+.mission-path {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.mission-path::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background-image: repeating-linear-gradient(90deg, hsl(var(--border)), hsl(var(--border)) 10px, transparent 10px, transparent 20px);
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.mission-node {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid hsl(var(--border));
+    background-color: hsl(var(--card));
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.mission-node.completed {
+    background-color: hsl(var(--primary) / 0.5);
+    border-color: hsl(var(--primary));
+}
+
+.mission-node.current {
+    background-color: hsl(var(--accent) / 0.5);
+    border-color: hsl(var(--accent));
+    transform: scale(1.2);
+    box-shadow: 0 0 15px hsl(var(--accent));
+}
+
+.mission-node.locked {
+    background-color: hsl(var(--muted));
+    border-color: hsl(var(--muted-foreground));
+    color: hsl(var(--muted-foreground));
+}
+
+    

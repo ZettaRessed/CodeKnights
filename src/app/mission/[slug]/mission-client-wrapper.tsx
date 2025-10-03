@@ -191,81 +191,28 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
         );
     }
       
-    // Default to code challenge
+    // This is the fallback, which should not happen if mission type is handled correctly.
     return (
-        <div className="mission-panel-grid">
-             {/* Top Row */}
-            <div className="mission-panel flex flex-col gap-6">
-                <KingPanel />
-            </div>
-            
-            <div className="mission-panel flex flex-col gap-6">
-                <div>
-                    <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
-                    <p className="text-muted-foreground mt-2">{mission.summary}</p>
-                </div>
-                
-                <div className="space-y-4">
-                    {mission.objectives.map((obj, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                            <CheckCircle className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
-                            <p className="text-sm text-primary-foreground">{obj}</p>
-                        </div>
-                    ))}
-                </div>
-
-                {mission.lore && (
-                    <div>
-                    <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
-                    <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
-                    </div>
-                )}
-            </div>
-            
-            {/* Bottom Row */}
-            <div className="mission-panel flex flex-col">
-                <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
-                <Textarea
-                    id="code-editor"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    className="flex-grow font-code"
-                    placeholder="Escribe tu código aquí..."
-                />
-                <Button onClick={handleExecuteCode} className="mt-2">
-                    <Play className="mr-2 h-4 w-4" />
-                    Ejecutar Código
-                </Button>
-            </div>
-
-            <div className="mission-panel flex flex-col">
-                <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
-                <div className='flex-grow bg-white rounded-md'>
-                    <iframe
-                        srcDoc={srcDoc}
-                        title="output"
-                        sandbox="allow-scripts"
-                        className="preview-frame"
-                    />
-                </div>
-            </div>
+        <div className="mission-panel challenge-panel">
+             <h2 className="text-2xl font-bold text-primary-foreground">Desafío Desconocido</h2>
+             <p className="text-muted-foreground mt-2">El tipo de misión no es reconocido.</p>
         </div>
-    )
+    );
   }
 
   return (
     <div className="flex h-screen w-full flex-col font-headline bg-background dark:bg-black/40 p-4 gap-4">
       <MissionHeader />
 
-      <main className="flex-1 mission-grid-narrative overflow-hidden">
+      <main className="flex-1 overflow-hidden">
         
         {mission.type === 'code' ? (
              <div className="mission-panel-grid">
                 {/* Top Row */}
-                <div className="mission-panel flex flex-col gap-6 justify-center">
+                <div className="mission-panel">
                     <KingPanel />
                 </div>
-                <div className="mission-panel flex flex-col gap-6">
+                <div className="mission-panel flex flex-col gap-4">
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
                         <p className="text-muted-foreground mt-2">{mission.description}</p>
@@ -289,30 +236,32 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                 </div>
                 
                 {/* Bottom Row */}
-                <div className="mission-panel flex flex-col">
-                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
-                    <Textarea
-                        id="code-editor"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        className="flex-grow font-code"
-                        placeholder="Escribe tu código aquí..."
-                    />
-                     <Button onClick={handleExecuteCode} className="mt-2">
-                        <Play className="mr-2 h-4 w-4" />
-                        Ejecutar Código
-                    </Button>
-                </div>
-
-                <div className="mission-panel flex flex-col">
-                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
-                    <div className='flex-grow bg-white rounded-md'>
-                        <iframe
-                            srcDoc={srcDoc}
-                            title="output"
-                            sandbox="allow-scripts"
-                            className="preview-frame"
+                <div className="mission-panel-bottom-row">
+                    <div className="mission-panel flex flex-col">
+                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
+                        <Textarea
+                            id="code-editor"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            className="flex-grow font-code"
+                            placeholder="Escribe tu código aquí..."
                         />
+                        <Button onClick={handleExecuteCode} className="mt-2">
+                            <Play className="mr-2 h-4 w-4" />
+                            Ejecutar Código
+                        </Button>
+                    </div>
+
+                    <div className="mission-panel flex flex-col">
+                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
+                        <div className='flex-grow bg-white rounded-md'>
+                            <iframe
+                                srcDoc={srcDoc}
+                                title="output"
+                                sandbox="allow-scripts"
+                                className="preview-frame"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

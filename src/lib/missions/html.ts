@@ -77,9 +77,16 @@ export const htmlMissions: Mission[] = [
     kingDialogue: {
       intro: "Mi reino tiene dos naturalezas: la mente, donde residen los pensamientos y secretos (<head>), y el cuerpo, donde se manifiesta todo lo visible (<body>). Un caballero debe saber distinguirlos. Muéstrame la estructura completa.",
       success: "Perfecto. Has creado un esqueleto, un recipiente listo para ser llenado con la vida del código. Tu potencial es evidente.",
+      failure: 'Hmm, algo no está del todo bien. Revisa la estructura fundamental. Todo reino necesita una declaración, un contenedor, una mente y un cuerpo, en ese orden.'
     },
     challenge: {
-      solution: '<!DOCTYPE html><html><head></head><body></body></html>',
+      solution: `<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+  </body>
+</html>`,
     },
     starterCode: '<!DOCTYPE html>\n',
     objectives: [
@@ -106,11 +113,26 @@ export const htmlMissions: Mission[] = [
     kingDialogue: {
       intro: "Un reino sin nombre es un reino olvidado. El nombre se susurra en la mente del reino, no se grita en su cuerpo. El estandarte no ondea, encuentra el error.",
       success: "Has demostrado tu agudeza. El <title> pertenece al <head>. Ahora, el nombre de tu dominio resonará en toda la red. Excelente.",
+      failure: 'Casi lo tienes, pero el estandarte sigue en el lugar incorrecto. Recuerda, el nombre de un dominio es un secreto que se guarda en la mente (<head>).'
     },
     challenge: {
-      solution: '<!DOCTYPE html><html><head><title>Mi Fortaleza</title></head><body></body></html>',
+      solution: `<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mi Fortaleza</title>
+  </head>
+  <body>
+  </body>
+</html>`,
     },
-    starterCode: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n  <title>Mi Fortaleza</title>\n</body>\n</html>',
+    starterCode: `<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  <title>Mi Fortaleza</title>
+</body>
+</html>`,
     objectives: [
       'Mueve la etiqueta <title> de la sección <body> a la sección <head>.',
     ],

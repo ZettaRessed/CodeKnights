@@ -50,10 +50,15 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
       setKingExpression('clapping');
       setKingDialogue(mission.kingDialogue?.success || '¡Excelente!');
     } else if (isCorrect === false) {
-      setKingExpression('angry');
-      setKingDialogue(mission.kingDialogue?.failure || 'Inténtalo de nuevo.');
+      if (mission.type === 'trivia') {
+        setKingExpression('angry');
+        setKingDialogue(mission.kingDialogue?.failure || 'Inténtalo de nuevo.');
+      } else { // For code missions
+        setKingExpression('confused');
+        setKingDialogue(mission.kingDialogue?.failure || 'Hmm, algo no está del todo bien.');
+      }
     }
-  }, [isCorrect, mission.kingDialogue]);
+  }, [isCorrect, mission.type, mission.kingDialogue]);
 
 
   useEffect(() => {
@@ -76,8 +81,17 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     }
   }, [executedCode, mission.type]);
 
+  const normalizeHtml = (html: string) => {
+    return html.replace(/\s+/g, ' ').replace(/> </g, '><').trim();
+  }
+
   const handleExecuteCode = () => {
     setExecutedCode(code);
+    if (mission.type === 'code' && mission.challenge.solution) {
+        const solution = normalizeHtml(mission.challenge.solution);
+        const userCode = normalizeHtml(code);
+        setIsCorrect(userCode === solution);
+    }
   };
 
 
@@ -215,7 +229,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                 <div className="mission-panel flex flex-col gap-4">
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
-                        <p className="text-muted-foreground mt-2">{mission.description}</p>
+                        <p className="text-muted-foreground mt-2">{mission.summary}</p>
                     </div>
                     
                     <div className="space-y-4">
@@ -264,6 +278,20 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                         </div>
                     </div>
                 </div>
+
+                {isCorrect !== null && (
+                    <div className="col-span-2 mt-4 text-center bg-card/80 p-4 rounded-lg border border-primary/20">
+                        <h3 className={cn("text-2xl font-bold", isCorrect ? "text-accent" : "text-destructive-foreground")}>
+                            {isCorrect ? "¡Código Correcto!" : "Código Incorrecto"}
+                        </h3>
+                        <p className="text-muted-foreground mt-2">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
+                        {isCorrect && (
+                            <Button onClick={handleNextMission} className="mt-4">
+                                Continuar
+                            </Button>
+                        )}
+                    </div>
+                 )}
             </div>
         ) : (
              <div className="mission-grid-narrative">

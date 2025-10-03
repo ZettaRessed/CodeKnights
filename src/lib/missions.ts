@@ -4,6 +4,7 @@ export type TriviaQuestion = {
   question: string;
   options: string[];
   correctAnswer: string;
+  hint?: string;
 };
 
 export type Mission = {

@@ -27,6 +27,7 @@ export const htmlMissions: Mission[] = [
             '<head>',
         ],
         correctAnswer: '<!DOCTYPE html>',
+        hint: 'Esta declaración no es una etiqueta HTML, sino una instrucción para el navegador sobre qué versión de HTML se está utilizando.',
     },
     achievement: 'Guardián de la Llave Maestra',
     objectives: [],
@@ -57,6 +58,7 @@ export const htmlMissions: Mission[] = [
         '<html></html><body></body>',
       ],
       correctAnswer: '<html><body></body></html>',
+      hint: 'La etiqueta <html> debe envolver a todas las demás etiquetas, y el contenido visible siempre va dentro del <body>.',
     },
     achievement: 'El Abrazo del Titán',
     objectives: [],
@@ -80,9 +82,9 @@ export const htmlMissions: Mission[] = [
       failure: 'Hmm, algo no está del todo bien. Revisa la estructura fundamental. Todo reino necesita una declaración, un contenedor, una mente y un cuerpo, en ese orden.'
     },
     challenge: {
-      solution: `<!DOCTYPE html>\n<html>\n  <head>\n  </head>\n  <body>\n  </body>\n</html>`,
+      solution: `<!DOCTYPE html><html><head></head><body></body></html>`,
     },
-    starterCode: '<!DOCTYPE html>\n',
+    starterCode: `<!DOCTYPE html>\n`,
     objectives: [
       'Añade la etiqueta <html> para envolver todo el documento.',
       'Dentro de <html>, crea la sección <head>.',
@@ -110,7 +112,7 @@ export const htmlMissions: Mission[] = [
       failure: 'Casi lo tienes, pero el estandarte sigue en el lugar incorrecto. Recuerda, el nombre de un dominio es un secreto que se guarda en la mente (<head>).'
     },
     challenge: {
-      solution: `<!DOCTYPE html>\n<html>\n  <head>\n    <title>Mi Fortaleza</title>\n  </head>\n  <body>\n  </body>\n</html>`,
+      solution: `<!DOCTYPE html><html><head><title>Mi Fortaleza</title></head><body></body></html>`,
     },
     starterCode: `<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n  <title>Mi Fortaleza</title>\n</body>\n</html>`,
     objectives: [
@@ -144,6 +146,7 @@ export const htmlMissions: Mission[] = [
         'Creará un párrafo de texto.',
       ],
       correctAnswer: 'Mostrará un título principal y de gran importancia.',
+      hint: 'La etiqueta <h1> se reserva para el título más importante de una página. Los motores de búsqueda le dan especial relevancia.',
     },
     objectives: [],
     achievement: 'La Voz del Rey',
@@ -171,6 +174,7 @@ export const htmlMissions: Mission[] = [
         question: '¿Qué etiqueta representa el encabezado de menor importancia?',
         options: ['<h2>', '<h4>', '<h6>'],
         correctAnswer: '<h6>',
+        hint: 'La jerarquía de encabezados va del más importante (1) al menos importante (6).',
     },
     achievement: 'Maestro de la Jerarquía',
     objectives: [],
@@ -194,7 +198,7 @@ export const htmlMissions: Mission[] = [
       failure: "El pergamino aún espera la crónica. Asegúrate de usar la runa <p> correctamente.",
     },
     challenge: {
-      solution: `<h1>La Leyenda de CodeKnights</h1>\n<p>Un caballero debe forjar su destino con líneas de código.</p>`,
+      solution: `<h1>La Leyenda de CodeKnights</h1><p>Un caballero debe forjar su destino con líneas de código.</p>`,
     },
     starterCode: `<h1>La Leyenda de CodeKnights</h1>`,
     objectives: [
@@ -259,6 +263,7 @@ export const htmlMissions: Mission[] = [
             'Poner la palabra "arte" en cursiva por razones puramente decorativas.'
         ],
         correctAnswer: 'Indicar que la palabra "arte" debe ser leída con un énfasis especial.',
+        hint: 'La etiqueta <em> (emphasis) es semántica, al igual que <strong>. Le dice a las tecnologías de asistencia que esa parte del texto tiene un énfasis diferente.',
     },
     achievement: 'El Susurro del Sabio',
     objectives: [],
@@ -289,6 +294,7 @@ export const htmlMissions: Mission[] = [
             '<ul><p>Espada</p><p>Escudo</p></ul>'
         ],
         correctAnswer: '<ul><li>Espada</li><li>Escudo</li></ul>',
+        hint: 'La etiqueta <ul> (Unordered List) es el contenedor, y cada <li> (List Item) es un elemento dentro de ella.',
     },
     achievement: 'Maestro de Inventarios',
     objectives: [],

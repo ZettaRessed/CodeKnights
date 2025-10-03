@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { type Mission, type TriviaQuestion, missions } from '@/lib/missions';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import './mission.css';
-import { Check, CheckCircle, Gem, Sparkles, Trophy, Flag, BookOpen, FileCode, Eye, ChevronLeft, X, Play } from 'lucide-react';
+import { Check, CheckCircle, Gem, Sparkles, Trophy, Flag, BookOpen, FileCode, Eye, ChevronLeft, X, Play, RefreshCw, Lightbulb } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
@@ -25,13 +25,14 @@ const kingExpressions: Record<KingExpression, string> = {
 
 
 export default function MissionClientWrapper({ mission }: { mission: Mission }) {
-  const [code, setCode] = useState(mission.starterCode || '');
+  const [code, setCode] = useState('');
   const [executedCode, setExecutedCode] = useState('');
   const [srcDoc, setSrcDoc] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [kingExpression, setKingExpression] = useState<KingExpression>('presenting');
-  const [kingDialogue, setKingDialogue] = useState(mission.kingDialogue?.intro || '');
+  const [kingDialogue, setKingDialogue] = useState('');
+  const [showHint, setShowHint] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -41,8 +42,9 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     setSrcDoc('');
     setSelectedAnswer(null);
     setIsCorrect(null);
-    setKingExpression('presenting');
+    setShowHint(false);
     setKingDialogue(mission.kingDialogue?.intro || '');
+    setKingExpression('presenting');
   }, [mission]);
   
   useEffect(() => {
@@ -82,15 +84,21 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   }, [executedCode, mission.type]);
 
   const normalizeHtml = (html: string) => {
-    return html.replace(/\s+/g, ' ').replace(/> </g, '><').trim();
+    if (!html) return '';
+    const el = document.createElement('div');
+    el.innerHTML = html;
+    // This is a basic normalization. For more complex cases, a proper HTML parser might be needed.
+    return el.innerHTML.replace(/\s+/g, ' ').replace(/> </g, '><').trim();
   }
 
   const handleExecuteCode = () => {
     setExecutedCode(code);
     if (mission.type === 'code' && mission.challenge.solution) {
-        const solution = normalizeHtml(mission.challenge.solution);
-        const userCode = normalizeHtml(code);
-        setIsCorrect(userCode === solution);
+      // A more robust solution would involve parsing and comparing abstract syntax trees (AST)
+      // For now, let's normalize strings to handle whitespace differences.
+      const solutionNormalized = mission.challenge.solution.replace(/\s+/g, '').trim();
+      const userCodeNormalized = code.replace(/\s+/g, '').trim();
+      setIsCorrect(userCodeNormalized === solutionNormalized);
     }
   };
 
@@ -106,6 +114,20 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     setSelectedAnswer(option);
     setIsCorrect(option === question.correctAnswer);
   };
+  
+  const handleRetry = () => {
+    setSelectedAnswer(null);
+    setIsCorrect(null);
+    setShowHint(false);
+    setKingDialogue(mission.kingDialogue?.intro || "¡Vamos, tú puedes!");
+    setKingExpression('presenting');
+  };
+
+  const handleShowHint = () => {
+    setShowHint(true);
+    setKingDialogue("Una pequeña ayuda de un viejo rey... espero que te sirva.");
+    setKingExpression('default');
+  }
 
   const handleNextMission = () => {
     const currentIndex = missions.findIndex(m => m.slug === mission.slug);
@@ -171,7 +193,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                  <div className="flex flex-col gap-3">
                      {question.options.map(option => {
                         const isSelected = selectedAnswer === option;
-                        const buttonVariant = isSelected ? (isCorrect ? 'default' : 'destructive') : 'outline';
+                        const buttonVariant = isCorrect === null ? 'outline' : (isSelected && isCorrect ? 'default' : (isSelected && !isCorrect ? 'destructive' : 'outline'));
                         const showIcon = isSelected && isCorrect !== null;
                         
                         return (
@@ -188,17 +210,40 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                         )
                     })}
                  </div>
-                 {isCorrect !== null && (
+                 {isCorrect === true && (
                     <div className="mt-6 text-center">
-                        <h3 className={cn("text-2xl font-bold", isCorrect ? "text-accent" : "text-destructive-foreground")}>
-                            {isCorrect ? "¡Respuesta Correcta!" : "Respuesta Incorrecta"}
+                        <h3 className="text-2xl font-bold text-accent">
+                            ¡Respuesta Correcta!
                         </h3>
-                        <p className="text-muted-foreground mt-2">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
-                        {isCorrect && (
-                            <Button onClick={handleNextMission} className="mt-4">
-                                Continuar
-                            </Button>
+                        <p className="text-muted-foreground mt-2">{`Has ganado el logro: "${mission.achievement}"`}</p>
+                        <Button onClick={handleNextMission} className="mt-4">
+                            Continuar
+                        </Button>
+                    </div>
+                 )}
+                 {isCorrect === false && (
+                    <div className="mt-6 text-center p-4 border border-destructive/50 rounded-lg bg-destructive/10">
+                        <h3 className="text-2xl font-bold text-destructive-foreground">Respuesta Incorrecta</h3>
+                        <p className="text-muted-foreground mt-2">El Rey no está complacido. ¿Qué harás, caballero?</p>
+                        
+                        {showHint && question.hint && (
+                           <Card className="mt-4 bg-background/80 border-accent/30 text-left">
+                               <CardContent className="p-3">
+                                   <p className="text-sm text-accent-foreground"><strong className="text-accent">Pista del Rey:</strong> {question.hint}</p>
+                               </CardContent>
+                           </Card>
                         )}
+                        
+                        <div className="mt-4 flex justify-center gap-4">
+                            <Button variant="outline" onClick={handleRetry}>
+                                <RefreshCw className="mr-2"/> Reintentar Misión
+                                <span className="ml-2 text-xs text-red-400">(-5 XP)</span>
+                            </Button>
+                            <Button variant="outline" onClick={handleShowHint} disabled={showHint}>
+                                <Lightbulb className="mr-2"/> Pedir Pista
+                                <span className="ml-2 flex items-center text-xs text-yellow-400">(-15 <Gem className="h-3 w-3 ml-1"/>)</span>
+                            </Button>
+                        </div>
                     </div>
                  )}
             </div>
@@ -218,7 +263,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     <div className="flex h-screen w-full flex-col font-headline bg-background dark:bg-black/40 p-4 gap-4">
       <MissionHeader />
 
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 grid overflow-hidden mission-grid-narrative">
         
         {mission.type === 'code' ? (
              <div className="mission-panel-grid">
@@ -285,10 +330,16 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                             {isCorrect ? "¡Código Correcto!" : "Código Incorrecto"}
                         </h3>
                         <p className="text-muted-foreground mt-2">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
-                        {isCorrect && (
+                        {isCorrect ? (
                             <Button onClick={handleNextMission} className="mt-4">
                                 Continuar
                             </Button>
+                        ) : (
+                           <div className="mt-4 flex justify-center gap-4">
+                                <Button variant="outline" onClick={handleExecuteCode}>
+                                    <RefreshCw className="mr-2"/> Reintentar
+                                </Button>
+                            </div>
                         )}
                     </div>
                  )}

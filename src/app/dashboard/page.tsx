@@ -49,6 +49,7 @@ import {
   ChevronRight,
   Lock,
   CheckCircle,
+  CircleDot,
 } from 'lucide-react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { app } from '@/lib/firebase';
@@ -62,6 +63,7 @@ import Link from 'next/link';
 import { missions, missionKingdoms } from '@/lib/missions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { motion } from 'framer-motion';
 
 const CustomIcon = ({ src, alt }: { src: string, alt: string }) => (
   <Image src={src} alt={alt} width={32} height={32} className="h-8 w-8" />
@@ -149,74 +151,113 @@ export default function DashboardPage() {
     const totalMissions = kingdomData.levels.reduce((acc, level) => acc + level.missions.length, 0);
     const progress = totalMissions > 0 ? (completedMissions / totalMissions) * 100 : 0;
   
+    const containerVariants = {
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.1
+        }
+      }
+    };
+  
+    const itemVariants = {
+      hidden: { y: 20, opacity: 0 },
+      visible: {
+        y: 0,
+        opacity: 1,
+        transition: {
+          type: "spring",
+          stiffness: 100
+        }
+      }
+    };
+
     return (
-      <DialogContent className="max-w-3xl bg-card/90 backdrop-blur-sm border-primary/20">
+      <DialogContent className="max-w-3xl bg-card/95 backdrop-blur-sm border-primary/20">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-primary-foreground">{kingdom.name}</DialogTitle>
-          <DialogDescription>{kingdom.description}</DialogDescription>
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <kingdom.icon />
+            </div>
+            <div>
+              <DialogTitle className="text-3xl font-bold text-primary-foreground">{kingdom.name}</DialogTitle>
+              <DialogDescription>{kingdom.description}</DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
         <div className="my-4">
           <div className="flex justify-between text-sm text-muted-foreground mb-1">
             <span>Progreso del Reino</span>
             <span>{completedMissions} / {totalMissions} Misiones</span>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progress value={progress} className="h-2" indicatorClassName="bg-accent shadow-[0_0_8px_theme(colors.accent.DEFAULT)]" />
         </div>
-        <ScrollArea className="h-[60vh]">
-          <Accordion type="single" collapsible defaultValue="level-1" className="w-full">
+        <ScrollArea className="h-[60vh] -mx-6">
+          <Accordion type="single" collapsible defaultValue="level-1" className="w-full px-6">
             {kingdomData.levels.map((level, levelIndex) => (
               <AccordionItem value={`level-${levelIndex + 1}`} key={levelIndex}>
-                <AccordionTrigger className="text-xl font-bold text-accent">
-                  {level.title}
+                <AccordionTrigger className="text-xl font-bold text-accent hover:no-underline">
+                  <div className="flex items-center gap-3">
+                    <BookOpen className="h-6 w-6"/>
+                    {level.title}
+                  </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="space-y-4 pr-6">
+                  <motion.div 
+                    className="space-y-3 pr-2"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                  >
                     {level.missions.map((missionSlug, missionIndex) => {
                       const mission = missions.find(m => m.slug === missionSlug);
                       if (!mission) return null;
                       const isCompleted = missionIndex < completedMissions; // Simulation
+                      const isCurrent = missionIndex === completedMissions;
         
                       return (
-                        <Card key={mission.slug} className="bg-background/70 border-primary/10">
-                          <CardHeader className='pb-4'>
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <CardTitle className="text-lg text-primary-foreground">{mission.title}</CardTitle>
-                                <CardDescription>{mission.description}</CardDescription>
+                        <motion.div key={mission.slug} variants={itemVariants}>
+                          <Card className={cn(
+                              "bg-background/70 border-l-4 transition-all hover:border-accent hover:bg-background/90",
+                              isCompleted ? "border-green-500/70" : "border-amber-500/70",
+                              isCurrent && "border-accent shadow-lg shadow-accent/10"
+                            )}>
+                            <CardContent className="p-4 flex items-center justify-between">
+                              <div className="flex items-center gap-4">
+                                {isCompleted ? (
+                                  <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0" />
+                                ) : isCurrent ? (
+                                  <CircleDot className="h-6 w-6 text-accent flex-shrink-0 animate-pulse" />
+                                ) : (
+                                  <Lock className="h-6 w-6 text-muted-foreground flex-shrink-0" />
+                                )}
+                                <div>
+                                  <p className="font-bold text-primary-foreground">{mission.title}</p>
+                                  <p className="text-xs text-muted-foreground">{mission.summary}</p>
+                                </div>
                               </div>
-                              {isCompleted ? (
-                                <Badge variant="outline" className='border-green-500 text-green-500'>
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                  Completado
-                                </Badge>
-                              ) : (
-                                 <Badge variant="outline" className='border-amber-500 text-amber-500'>
-                                  Pendiente
-                                </Badge>
-                              )}
-                            </div>
-                          </CardHeader>
-                          <CardContent className="flex justify-between items-center pb-4">
-                             <div className="flex gap-4">
+                              <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2 text-accent">
                                     <Gem className="h-4 w-4" />
-                                    <span className="font-bold text-sm">{mission.rewards.gems} Gemas</span>
+                                    <span className="font-bold text-sm">{mission.rewards.gems}</span>
                                 </div>
-                                 <div className="flex items-center gap-2 text-primary">
+                                <div className="flex items-center gap-2 text-primary">
                                     <Sparkles className="h-4 w-4" />
-                                    <span className="font-bold text-sm">{mission.rewards.xp} XP</span>
+                                    <span className="font-bold text-sm">{mission.rewards.xp}</span>
                                 </div>
-                            </div>
-                            <Button asChild size="sm">
-                              <Link href={`/mission/${mission.slug}`}>
-                                {isCompleted ? "Repasar" : "Empezar"} <ChevronRight className="h-4 w-4 ml-2" />
-                              </Link>
-                            </Button>
-                          </CardContent>
-                        </Card>
+                                <Button asChild size="sm" disabled={!isCompleted && !isCurrent}>
+                                  <Link href={`/mission/${mission.slug}`}>
+                                    {isCompleted ? "Repasar" : "Empezar"} <ChevronRight className="h-4 w-4 ml-2" />
+                                  </Link>
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 </AccordionContent>
               </AccordionItem>
             ))}

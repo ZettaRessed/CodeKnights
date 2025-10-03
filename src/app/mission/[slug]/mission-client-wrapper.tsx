@@ -72,9 +72,6 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     } else if (isCorrect === false) {
       setKingExpression('angry');
       setKingDialogue(mission.kingDialogue?.failure || 'Inténtalo de nuevo.');
-    } else {
-        setKingExpression('presenting');
-        setKingDialogue(mission.kingDialogue?.intro || '');
     }
   }, [isCorrect, mission.kingDialogue]);
 

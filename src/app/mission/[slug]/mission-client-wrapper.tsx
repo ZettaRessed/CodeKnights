@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { type Mission, type TriviaQuestion } from '@/lib/missions';
+import { type Mission, type TriviaQuestion, missions } from '@/lib/missions';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import './mission.css';
 import { Check, CheckCircle, Gem, Sparkles, Trophy, Flag, BookOpen, FileCode, Eye, ChevronLeft, X } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
 
 type KingExpression = 'presenting' | 'default' | 'surprised' | 'confused' | 'angry' | 'clapping';
 
@@ -30,6 +31,17 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [kingExpression, setKingExpression] = useState<KingExpression>('presenting');
   const [kingDialogue, setKingDialogue] = useState(mission.kingDialogue?.intro || '');
+  const router = useRouter();
+
+  useEffect(() => {
+    // Reset state when mission changes
+    setCode(mission.starterCode || '');
+    setSrcDoc('');
+    setSelectedAnswer(null);
+    setIsCorrect(null);
+    setKingExpression('presenting');
+    setKingDialogue(mission.kingDialogue?.intro || '');
+  }, [mission]);
 
   useEffect(() => {
     if (mission.type === 'code') {
@@ -79,6 +91,18 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
     setIsCorrect(option === question.correctAnswer);
   };
 
+  const handleNextMission = () => {
+    const currentIndex = missions.findIndex(m => m.slug === mission.slug);
+    const nextMission = missions[currentIndex + 1];
+    
+    if (nextMission) {
+      router.push(`/mission/${nextMission.slug}`);
+    } else {
+      // If there's no next mission, maybe go back to dashboard
+      router.push('/dashboard');
+    }
+  };
+
   const MissionHeader = () => (
      <header className="flex items-center justify-between flex-shrink-0 bg-card/60 border border-primary/20 p-2 px-4 rounded-lg">
         <div className="flex items-center gap-4">
@@ -102,7 +126,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                 <Sparkles className="h-5 w-5" />
                 <span className="font-bold">{mission.rewards.xp} XP</span>
             </div>
-          <Button onClick={handleCompleteMission} disabled={!isCorrect}>
+          <Button onClick={handleCompleteMission} disabled={isCorrect !== true}>
             <Trophy className="mr-2 h-4 w-4" /> Reclamar Recompensa
           </Button>
         </div>
@@ -155,7 +179,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                         </h3>
                         <p className="text-muted-foreground mt-2">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
                         {isCorrect && (
-                            <Button onClick={() => alert("Siguiente misión!")} className="mt-4">
+                            <Button onClick={handleNextMission} className="mt-4">
                                 Continuar
                             </Button>
                         )}

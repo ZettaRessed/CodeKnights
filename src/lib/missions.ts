@@ -58,6 +58,10 @@ export const missionKingdoms: Record<string, MissionKingdom> = {
       {
         title: 'Nivel 3: La Plaza de los Decretos',
         missions: ['html-m3-1', 'html-m3-2', 'html-m3-3', 'html-m3-4'],
+      },
+      {
+        title: 'Nivel 4: La Gran Biblioteca de los Portales',
+        missions: ['html-m4-1', 'html-m4-2', 'html-m4-3', 'html-m4-4'],
       }
     ]
   },

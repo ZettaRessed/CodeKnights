@@ -391,6 +391,7 @@ export const htmlMissions: Mission[] = [
     },
     achievement: 'Guardián del Glosario',
     objectives: [],
+
   },
   {
     slug: 'html-m3-4',
@@ -419,5 +420,125 @@ export const htmlMissions: Mission[] = [
     ],
     lore: 'Para anidar una lista, la nueva lista completa (ej: <ul>...</ul>) debe colocarse dentro de la etiqueta <li> del elemento padre.',
     achievement: 'Estratega Jerárquico',
+  },
+  // Nivel 4
+  {
+    slug: 'html-m4-1',
+    title: 'Forjando un Portal',
+    description: 'Nivel 4: La Gran Biblioteca de los Portales',
+    summary: 'Crea tu primer portal a otro dominio usando la runa <a>.',
+    kingdomId: 'html-css',
+    level: 4,
+    mission: 1,
+    type: 'code',
+    rewards: {
+      gems: 25,
+      xp: 40,
+    },
+    kingDialogue: {
+      intro: "Guerrero, el verdadero poder de mi reino es la conexión. La runa <a>, con su atributo mágico href, crea portales a otros dominios. Forja tu primer portal a la armería principal de la web.",
+      success: "El portal brilla con vida. Has aprendido el hechizo más fundamental de la web: el hipervínculo. Con él, los mundos se conectan.",
+      failure: "El portal no se ha formado correctamente. Revisa el atributo href y asegúrate de que el texto del enlace esté dentro de la runa <a>.",
+    },
+    challenge: {
+      solution: '<a href="https://www.github.com">Visitar la Armería</a>',
+    },
+    starterCode: '',
+    objectives: [
+      'Crea una etiqueta de anclaje <a>.',
+      'Añade un atributo href que apunte a "https://www.github.com".',
+      'Coloca el texto "Visitar la Armería" dentro de la etiqueta.'
+    ],
+    lore: 'La etiqueta <a> (ancla) es la que crea hipervínculos. El atributo `href` (hypertext reference) especifica la URL de destino del enlace.',
+    achievement: 'Forjador de Portales',
+  },
+  {
+    slug: 'html-m4-2',
+    title: 'El Ancla del Saber',
+    description: 'Nivel 4: La Gran Biblioteca de los Portales',
+    summary: 'Aprende a crear enlaces internos que salten a secciones específicas de una página.',
+    kingdomId: 'html-css',
+    level: 4,
+    mission: 2,
+    type: 'code',
+    rewards: {
+      gems: 25,
+      xp: 40,
+    },
+    kingDialogue: {
+      intro: "Los portales no solo viajan entre reinos, sino dentro de un mismo pergamino. Usando un id como marca y una almohadilla (#) en el href, puedes crear un ancla para saltar a secciones específicas de un texto largo. El siguiente código intenta crear un enlace a la sección \"Capítulo 2\", pero el portal no funciona. El id y el href no coinciden. ¡Repáralo!",
+      success: "Has sincronizado el ancla. Ahora los viajeros pueden navegar por tus largos escritos con la velocidad del pensamiento. La navegación precisa es signo de un guerrero avanzado.",
+      failure: "El ancla y el destino no están sincronizados. Asegúrate de que el valor del href (después de la #) coincida exactamente con el id del elemento de destino.",
+    },
+    challenge: {
+      solution: '<a href="#capitulo2">Ir al Capítulo 2</a>\n...\n<h2 id="capitulo2">Capítulo 2</h2>',
+    },
+    starterCode: '<a href="#capitulo3">Ir al Capítulo 2</a>\n...\n<h2 id="capitulo2">Capítulo 2</h2>',
+    objectives: [
+      'Corrige el atributo href del enlace para que apunte a #capitulo2.',
+    ],
+    lore: 'Los enlaces internos, o anclas, usan el símbolo # seguido del valor del atributo `id` del elemento al que quieres saltar.',
+    achievement: 'Maestro de las Anclas',
+  },
+  {
+    slug: 'html-m4-3',
+    title: 'El Portal a Otra Dimensión',
+    description: 'Nivel 4: La Gran Biblioteca de los Portales',
+    summary: 'Aprende a hacer que los enlaces se abran en una nueva pestaña.',
+    kingdomId: 'html-css',
+    level: 4,
+    mission: 3,
+    type: 'trivia',
+    rewards: {
+      gems: 30,
+      xp: 45,
+    },
+    kingDialogue: {
+      intro: "A veces, es descortés hacer que un viajero abandone tu reino al abrir un portal. Puedes ordenar que el nuevo dominio se abra en una nueva dimensión (una nueva pestaña del navegador).",
+      success: 'Correcto. target="_blank" es el conjuro para preservar el lugar de tu visitante mientras explora otros lares. Es una muestra de respeto y buena práctica.',
+      failure: "Ese no es el conjuro correcto. El viajero podría perderse. Piensa en el 'objetivo' (target) y un espacio 'en blanco' (blank).",
+    },
+    challenge: {
+        question: '¿Qué atributo y valor se añade a una etiqueta <a> para que el enlace se abra en una nueva pestaña?',
+        options: [
+            'target="_new"',
+            'open="_blank"',
+            'target="_blank"'
+        ],
+        correctAnswer: 'target="_blank"',
+        hint: 'El atributo se llama `target`, y su valor más común para este propósito es `_blank`.',
+    },
+    achievement: 'Viajero Dimensional',
+    objectives: [],
+  },
+  {
+    slug: 'html-m4-4',
+    title: 'El Cuervo Mensajero',
+    description: 'Nivel 4: La Gran Biblioteca de los Portales',
+    summary: 'Crea un enlace que abra el cliente de correo del usuario.',
+    kingdomId: 'html-css',
+    level: 4,
+    mission: 4,
+    type: 'code',
+    rewards: {
+      gems: 35,
+      xp: 50,
+    },
+    kingDialogue: {
+      intro: "Finalmente, los portales pueden invocar acciones, como llamar a un cuervo mensajero (abrir un cliente de correo electrónico). El protocolo mailto: es la clave para esta magia.",
+      success: "Has invocado al cuervo con éxito. Esta runa es vital para la comunicación entre los señores de los dominios. Tu arsenal de habilidades se expande.",
+      failure: "El cuervo no ha respondido. Asegúrate de que el protocolo `mailto:` esté correctamente escrito en el atributo href.",
+    },
+    challenge: {
+      solution: '<a href="mailto:rey@html.org">Contactar al Rey</a>',
+    },
+    starterCode: '',
+    objectives: [
+      'Crea una etiqueta <a>.',
+      'Añade un atributo href que comience con "mailto:" seguido de la dirección "rey@html.org".',
+      'Añade el texto "Contactar al Rey" dentro de la etiqueta.'
+    ],
+    lore: 'Usar `mailto:` en el `href` de un enlace le indica al navegador que debe abrir el programa de correo predeterminado del usuario y comenzar un nuevo borrador a la dirección especificada.',
+    achievement: 'Invocador de Cuervos',
   },
 ];

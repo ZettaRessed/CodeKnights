@@ -36,15 +36,16 @@ export const missions: Mission[] = [
   // Future missions from other kingdoms will be added here
 ];
 
-export const levels = {
-  'html-css': [
-    {
-      level: 1,
-      title: 'Las Puertas del Reino',
-      rank: 'Aspirante',
-      missions: ['html-m1-1', 'html-m1-2', 'html-m1-3', 'html-m1-4', 'html-m1-5']
-    }
-  ]
+export const kingdoms = {
+  'html-css': {
+    missions: ['html-m1-1', 'html-m1-2', 'html-m1-3', 'html-m1-4', 'html-m1-5'],
+  },
+  'javascript': {
+    missions: [],
+  },
+  'python': {
+    missions: [],
+  }
 }
 
     

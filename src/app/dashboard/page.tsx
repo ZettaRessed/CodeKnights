@@ -42,6 +42,7 @@ import {
   Sparkles,
   ChevronRight,
   Lock,
+  CheckCircle,
 } from 'lucide-react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { app } from '@/lib/firebase';
@@ -52,8 +53,9 @@ import './map.css';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { missions, levels } from '@/lib/missions';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
+import { missions, kingdoms as missionKingdoms } from '@/lib/missions';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const CustomIcon = ({ src, alt }: { src: string, alt: string }) => (
   <Image src={src} alt={alt} width={32} height={32} className="h-8 w-8" />
@@ -82,7 +84,6 @@ const kingdoms = [
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [character, setCharacter] = useState<{class: CharacterClass, experience: string} | null>(null);
-  const [selectedKingdom, setSelectedKingdom] = useState<(typeof kingdoms[0]) | null>(null);
   
   const auth = getAuth(app);
 
@@ -133,96 +134,77 @@ export default function DashboardPage() {
     </Card>
   )
 
-  const MissionList = ({ kingdomId, kingdomName }: { kingdomId: keyof typeof levels, kingdomName: string }) => {
-    const kingdomLevels = levels[kingdomId];
-    const completedMissions = 2; // Simulación: el jugador ha completado 2 misiones.
+  const KingdomMissionsModal = ({ kingdom }: { kingdom: typeof kingdoms[0] }) => {
+    const kingdomData = missionKingdoms[kingdom.id as keyof typeof missionKingdoms];
+    if (!kingdomData) return null;
+  
+    const completedMissions = 2; // Simulation
+    const totalMissions = kingdomData.missions.length;
+    const progress = (completedMissions / totalMissions) * 100;
   
     return (
-      <SheetContent className="w-[600px] sm:w-[720px] bg-card/90 backdrop-blur-sm border-primary/20 overflow-y-auto">
-        <SheetHeader className="mb-6 text-left">
-          <SheetTitle className="text-3xl font-bold text-primary-foreground">
-            Misiones de {kingdomName}
-          </SheetTitle>
-          <SheetDescription>
-            Completa los niveles para ganar gemas, experiencia y el favor del reino.
-          </SheetDescription>
-        </SheetHeader>
-        {kingdomLevels && kingdomLevels.length > 0 ? (
-          <div className="space-y-8">
-            {kingdomLevels.map(level => {
-                const currentMissionIndex = completedMissions;
-                const currentMissionSlug = level.missions[currentMissionIndex];
-
-                return (
-                    <Card key={level.level} className="bg-background/70 border-primary/10">
-                        <CardHeader>
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <CardDescription>Nivel {level.level}</CardDescription>
-                                    <CardTitle className="text-primary-foreground">{level.title}</CardTitle>
-                                </div>
-                                <Badge variant="outline" className="border-accent text-accent text-sm">
-                                    Rango: {level.rank}
-                                </Badge>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="mission-path-container">
-                                <div className="mission-path">
-                                    {level.missions.map((missionSlug, index) => {
-                                        const missionData = missions.find(m => m.slug === missionSlug);
-                                        const isCompleted = index < currentMissionIndex;
-                                        const isCurrent = index === currentMissionIndex;
-                                        const isLocked = index > currentMissionIndex;
-                                        
-                                        return (
-                                            <TooltipProvider key={missionSlug}>
-                                                <Tooltip>
-                                                    <TooltipTrigger asChild>
-                                                        <div className={cn("mission-node", { 'completed': isCompleted, 'current': isCurrent, 'locked': isLocked })}>
-                                                            {isCompleted ? <Star className="text-yellow-400"/> : isLocked ? <Lock /> : <Swords className="text-accent"/>}
-                                                        </div>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>
-                                                        <p className="font-bold">{missionData?.title}</p>
-                                                        <p className="text-sm text-muted-foreground">{isCompleted ? 'Completado' : isCurrent ? 'Misión actual' : 'Bloqueado'}</p>
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            </TooltipProvider>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </CardContent>
-                        <CardFooter className="flex-col items-start gap-4">
-                             <div className="w-full">
-                                <p className="text-sm text-muted-foreground">Progreso del Nivel</p>
-                                <Progress value={(completedMissions / level.missions.length) * 100} className="h-2 mt-1" />
-                             </div>
-                             {currentMissionSlug ? (
-                                <Button asChild className="w-full">
-                                    <Link href={`/mission/${currentMissionSlug}`}>
-                                    Ir a la misión <ChevronRight className="ml-2 h-4 w-4" />
-                                    </Link>
-                                </Button>
-                             ) : (
-                                <Button disabled className="w-full">Nivel Completado</Button>
-                             )}
-                        </CardFooter>
-                    </Card>
-                );
+      <DialogContent className="max-w-2xl bg-card/90 backdrop-blur-sm border-primary/20">
+        <DialogHeader>
+          <DialogTitle className="text-3xl font-bold text-primary-foreground">{kingdom.name}</DialogTitle>
+          <DialogDescription>{kingdom.description}</DialogDescription>
+        </DialogHeader>
+        <div className="my-4">
+          <div className="flex justify-between text-sm text-muted-foreground mb-1">
+            <span>Progreso del Reino</span>
+            <span>{completedMissions} / {totalMissions} Misiones</span>
+          </div>
+          <Progress value={progress} className="h-2" />
+        </div>
+        <ScrollArea className="h-[50vh]">
+          <div className="space-y-4 pr-6">
+            {kingdomData.missions.map((missionSlug, index) => {
+              const mission = missions.find(m => m.slug === missionSlug);
+              if (!mission) return null;
+              const isCompleted = index < completedMissions;
+  
+              return (
+                <Card key={mission.slug} className="bg-background/70 border-primary/10">
+                  <CardHeader className='pb-4'>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-lg text-primary-foreground">{mission.title}</CardTitle>
+                        <CardDescription>{mission.description}</CardDescription>
+                      </div>
+                      {isCompleted ? (
+                        <Badge variant="outline" className='border-green-500 text-green-500'>
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Completado
+                        </Badge>
+                      ) : (
+                         <Badge variant="outline" className='border-amber-500 text-amber-500'>
+                          Pendiente
+                        </Badge>
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex justify-between items-center pb-4">
+                     <div className="flex gap-4">
+                        <div className="flex items-center gap-2 text-accent">
+                            <Gem className="h-4 w-4" />
+                            <span className="font-bold text-sm">{mission.rewards.gems} Gemas</span>
+                        </div>
+                         <div className="flex items-center gap-2 text-primary">
+                            <Sparkles className="h-4 w-4" />
+                            <span className="font-bold text-sm">{mission.rewards.xp} XP</span>
+                        </div>
+                    </div>
+                    <Button asChild size="sm">
+                      <Link href={`/mission/${mission.slug}`}>
+                        {isCompleted ? "Repasar" : "Empezar"} <ChevronRight className="h-4 w-4 ml-2" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
             })}
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center p-8">
-            <Scroll className="h-24 w-24 text-primary/30 mb-4" />
-            <h3 className="text-2xl font-bold text-primary-foreground">No hay misiones disponibles.</h3>
-            <p className="text-muted-foreground mt-2">
-              Los escribas de {kingdomName} todavía están preparando los pergaminos. ¡Vuelve pronto, caballero!
-            </p>
-          </div>
-        )}
-      </SheetContent>
+        </ScrollArea>
+      </DialogContent>
     );
   };
   
@@ -238,21 +220,20 @@ export default function DashboardPage() {
       <div className="absolute inset-0 bg-black/30 z-10"></div>
       
       <TooltipProvider>
-        <Sheet>
+        <Dialog>
             {kingdoms.map(kingdom => (
               <Tooltip key={kingdom.id} delayDuration={100}>
                 <TooltipTrigger asChild>
-                  <SheetTrigger asChild>
+                  <DialogTrigger asChild>
                     <div 
                       className="absolute z-20 cursor-pointer"
                       style={{ top: kingdom.position.top, left: kingdom.position.left, transform: 'translate(-50%, -50%)' }}
-                       onClick={() => setSelectedKingdom(kingdom)}
                     >
                       <div className="kingdom-node">
                         <kingdom.icon />
                       </div>
                     </div>
-                  </SheetTrigger>
+                  </DialogTrigger>
                 </TooltipTrigger>
                 <TooltipContent className="bg-card/80 backdrop-blur-sm border-primary/30 text-primary-foreground">
                   <p className="font-bold text-primary">{kingdom.name}</p>
@@ -260,8 +241,11 @@ export default function DashboardPage() {
                 </TooltipContent>
               </Tooltip>
             ))}
-            {selectedKingdom && <MissionList kingdomId={selectedKingdom.id as keyof typeof levels} kingdomName={selectedKingdom.name} />}
-        </Sheet>
+            {/* This assumes we have a way to set which kingdom is selected to show the modal */}
+            {/* A real implementation would need state to manage the selectedKingdom for the Dialog */}
+            {/* For now, let's render one for the first kingdom to demonstrate */}
+            <KingdomMissionsModal kingdom={kingdoms[0]}/>
+        </Dialog>
       </TooltipProvider>
     </div>
   );

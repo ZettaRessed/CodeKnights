@@ -78,13 +78,13 @@ export const htmlMissions: Mission[] = [
     },
     kingDialogue: {
       intro: "Mi reino tiene dos naturalezas: la mente, donde residen los pensamientos y secretos (<head>), y el cuerpo, donde se manifiesta todo lo visible (<body>). Un caballero debe saber distinguirlos. Muéstrame la estructura completa.",
-      success: "Perfecto. Has creado un esqueleto, un recipiente listo para ser llenado con la vida del código. Tu potencial es evidente.",
+      success: "Has creado un esqueleto, un recipiente listo para ser llenado con la vida del código. Tu potencial es evidente.",
       failure: 'Hmm, algo no está del todo bien. Revisa la estructura fundamental. Todo reino necesita una declaración, un contenedor, una mente y un cuerpo, en ese orden.'
     },
     challenge: {
       solution: `<!DOCTYPE html><html><head></head><body></body></html>`,
     },
-    starterCode: `<!DOCTYPE html>\n`,
+    starterCode: `<!DOCTYPE html>`,
     objectives: [
       'Añade la etiqueta <html> para envolver todo el documento.',
       'Dentro de <html>, crea la sección <head>.',
@@ -137,6 +137,7 @@ export const htmlMissions: Mission[] = [
     kingDialogue: {
       intro: "Ahora, pronuncia tus primeras palabras en esta tierra. Usa la runa de encabezado más poderosa, la que proclama el edicto de un rey. ¿Qué hará el siguiente código?",
       success: "Has interpretado la runa correctamente. <h1> es la voz del liderazgo. Has anunciado tu llegada con honor.",
+      failure: "No has entendido la proclamación. Un <h1> no es un simple texto, es la declaración más importante de la página."
     },
     challenge: {
       question: 'Considerando el código <body><h1>¡He llegado!</h1></body>, ¿cuál será el resultado?',
@@ -148,8 +149,8 @@ export const htmlMissions: Mission[] = [
       correctAnswer: 'Mostrará un título principal y de gran importancia.',
       hint: 'La etiqueta <h1> se reserva para el título más importante de una página. Los motores de búsqueda le dan especial relevancia.',
     },
-    objectives: [],
     achievement: 'La Voz del Rey',
+    objectives: [],
   },
   // Nivel 2
   {
@@ -298,5 +299,125 @@ export const htmlMissions: Mission[] = [
     },
     achievement: 'Maestro de Inventarios',
     objectives: [],
-  }
+  },
+  // Nivel 3
+  {
+    slug: 'html-m3-1',
+    title: 'Las Órdenes del Día',
+    description: 'Nivel 3: La Plaza de los Decretos',
+    summary: 'Crea una lista ordenada para establecer una secuencia de comandos.',
+    kingdomId: 'html-css',
+    level: 3,
+    mission: 1,
+    type: 'code',
+    rewards: {
+      gems: 15,
+      xp: 30,
+    },
+    kingDialogue: {
+      intro: "Soldado, la claridad es esencial. Para presentar una serie de pasos o mandatos donde la secuencia es crucial, usamos la runa de la lista ordenada.",
+      success: "Impecable. Has comprendido que el orden <ol> es la base de todo proceso y algoritmo. Cada paso sigue al anterior en una secuencia inquebrantable.",
+      failure: "La secuencia es incorrecta. Un plan de batalla debe seguirse al pie de la letra.",
+    },
+    challenge: {
+      solution: `<ol><li>Primero, desenvainar.</li><li>Segundo, apuntar.</li><li>Tercero, codificar.</li></ol>`,
+    },
+    starterCode: ``,
+    objectives: [
+      'Crea una lista ordenada (<ol>).',
+      'Añade tres elementos de lista (<li>) con los pasos: "Primero, desenvainar.", "Segundo, apuntar.", "Tercero, codificar.".',
+    ],
+    lore: 'La etiqueta <ol> (Ordered List) crea una lista numerada, ideal para instrucciones paso a paso o cualquier contenido donde el orden sea importante.',
+    achievement: 'Maestro de la Secuencia',
+  },
+  {
+    slug: 'html-m3-2',
+    title: 'El Manifiesto Roto',
+    description: 'Nivel 3: La Plaza de los Decretos',
+    summary: 'Reconstruye una lista no ordenada a partir de fragmentos.',
+    kingdomId: 'html-css',
+    level: 3,
+    mission: 2,
+    type: 'trivia',
+    rewards: {
+      gems: 15,
+      xp: 30,
+    },
+    kingDialogue: {
+      intro: "Un escriba novato ha intentado listar las virtudes de un caballero, pero el pergamino está roto y las runas desordenadas. Un verdadero soldado debe saber restaurar el orden a partir del caos.",
+      success: "Has restaurado el manifiesto. Demuestras que entiendes tanto la estructura contenedora <ul> como el contenido <li>. La organización es tu aliada.",
+      failure: "El caos persiste. Revisa la estructura fundamental de una lista.",
+    },
+    challenge: {
+        question: '¿Cuál es la forma correcta de reconstruir una lista con las virtudes "Disciplina" y "Valor"?',
+        options: [
+            '<ul><li>Disciplina</li><li>Valor</li></ul>',
+            '<li>Disciplina</li><li>Valor</li>',
+            '<ul><item>Disciplina</item><item>Valor</item></ul>'
+        ],
+        correctAnswer: '<ul><li>Disciplina</li><li>Valor</li></ul>',
+        hint: 'Toda lista no ordenada comienza y termina con <ul>, y cada elemento dentro de ella es un <li>.',
+    },
+    achievement: 'Restaurador de Manifiestos',
+    objectives: [],
+  },
+  {
+    slug: 'html-m3-3',
+    title: 'El Glosario Arcano',
+    description: 'Nivel 3: La Plaza de los Decretos',
+    summary: 'Interpreta el resultado de una lista de definición.',
+    kingdomId: 'html-css',
+    level: 3,
+    mission: 3,
+    type: 'trivia',
+    rewards: {
+      gems: 20,
+      xp: 35,
+    },
+    kingDialogue: {
+      intro: "Existen listas más complejas, para definir términos y sus descripciones, como un glosario. La lista de definición <dl> contiene el término <dt> y su descripción <dd>.",
+      success: "Tu interpretación es correcta. Has descifrado la estructura de las listas de conocimiento, una herramienta poderosa para la enseñanza.",
+      failure: "No has entendido el pergamino. Observa cómo se agrupan el término y su descripción.",
+    },
+    challenge: {
+        question: '¿Qué estructura creará el siguiente código? <dl><dt>HTML</dt><dd>El lenguaje de la estructura.</dd></dl>',
+        options: [
+            'Una lista con viñetas.',
+            'Una lista numerada.',
+            'Una lista de términos con sus definiciones indentadas.'
+        ],
+        correctAnswer: 'Una lista de términos con sus definiciones indentadas.',
+        hint: '<dl> (Definition List), <dt> (Definition Term), y <dd> (Definition Description) trabajan juntas para crear glosarios o listas de metadatos.',
+    },
+    achievement: 'Guardián del Glosario',
+    objectives: [],
+  },
+  {
+    slug: 'html-m3-4',
+    title: 'La Jerarquía de Comandos',
+    description: 'Nivel 3: La Plaza de los Decretos',
+    summary: 'Aprende a anidar listas correctamente para crear jerarquías.',
+    kingdomId: 'html-css',
+    level: 3,
+    mission: 4,
+    type: 'code',
+    rewards: {
+      gems: 20,
+      xp: 40,
+    },
+    kingDialogue: {
+      intro: "A veces, una orden contiene sub-órdenes. Mi lenguaje permite anidar listas para crear jerarquías complejas. El siguiente plan de ataque es inválido. Corrige el error.",
+      success: "¡Excelente! La sub-lista debe vivir dentro del <li> de su padre. Has demostrado una comprensión profunda de la estructura anidada. Tu capacidad estratégica crece.",
+      failure: "El plan sigue siendo confuso. La sub-orden no está correctamente vinculada a su orden principal.",
+    },
+    challenge: {
+      solution: `<ul><li>Atacar el flanco izquierdo<ul><li>Enviar caballería</li></ul></li></ul>`,
+    },
+    starterCode: `<ul>\n  <li>Atacar el flanco izquierdo</li>\n  <ul>\n    <li>Enviar caballería</li>\n  </ul>\n</ul>`,
+    objectives: [
+      'Anida la lista no ordenada <ul> secundaria dentro del <li> de "Atacar el flanco izquierdo".',
+    ],
+    lore: 'Para anidar una lista, la nueva lista completa (ej: <ul>...</ul>) debe colocarse dentro de la etiqueta <li> del elemento padre.',
+    achievement: 'Estratega Jerárquico',
+  },
 ];

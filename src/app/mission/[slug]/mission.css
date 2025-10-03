@@ -64,3 +64,11 @@
 .mission-panel-grid > .col-span-2 {
     grid-column: span 2 / span 2;
 }
+
+.mission-panel .flex-grow {
+    flex-grow: 1;
+}
+
+.mission-panel > button {
+    flex-shrink: 0;
+}

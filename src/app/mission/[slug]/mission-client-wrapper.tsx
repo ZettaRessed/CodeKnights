@@ -291,32 +291,30 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                     )}
                 </div>
                 
-                <div className="col-span-2 flex gap-4">
-                    <div className="mission-panel flex flex-col w-1/2">
-                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
-                        <Textarea
-                            id="code-editor"
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            className="flex-grow font-code"
-                            placeholder="Escribe tu código aquí..."
-                        />
-                        <Button onClick={handleExecuteCode} className="mt-2">
-                            <Play className="mr-2 h-4 w-4" />
-                            Ejecutar Código
-                        </Button>
-                    </div>
+                <div className="mission-panel flex flex-col">
+                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
+                    <Textarea
+                        id="code-editor"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        className="flex-grow font-code"
+                        placeholder="Escribe tu código aquí..."
+                    />
+                    <Button onClick={handleExecuteCode} className="mt-2">
+                        <Play className="mr-2 h-4 w-4" />
+                        Ejecutar Código
+                    </Button>
+                </div>
 
-                    <div className="mission-panel flex flex-col w-1/2">
-                        <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
-                        <div className='flex-grow bg-white rounded-md'>
-                            <iframe
-                                srcDoc={srcDoc}
-                                title="output"
-                                sandbox="allow-scripts"
-                                className="preview-frame"
-                            />
-                        </div>
+                <div className="mission-panel flex flex-col">
+                    <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
+                    <div className='flex-grow bg-white rounded-md'>
+                        <iframe
+                            srcDoc={srcDoc}
+                            title="output"
+                            sandbox="allow-scripts"
+                            className="preview-frame"
+                        />
                     </div>
                 </div>
 

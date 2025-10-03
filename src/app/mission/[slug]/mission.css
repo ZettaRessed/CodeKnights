@@ -8,8 +8,8 @@
 
 .mission-panel-grid {
     display: grid;
-    grid-template-rows: auto 1fr;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
     gap: 1rem;
     height: 100%;
     overflow: hidden;
@@ -59,10 +59,6 @@
     border: 0;
     background-color: white;
     border-radius: var(--radius);
-}
-
-.mission-panel-grid > .col-span-2 {
-    grid-column: span 2 / span 2;
 }
 
 .mission-panel .flex-grow {

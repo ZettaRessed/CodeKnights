@@ -336,9 +336,9 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="flex h-screen w-full font-headline overflow-hidden bg-background dark:bg-black/40">
+    <div className="flex flex-col md:flex-row h-screen w-full font-headline overflow-hidden bg-background dark:bg-black/40">
       {/* Left Sidebar */}
-      <aside className="w-[280px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-r border-primary/10 p-4 flex flex-col gap-6">
+      <aside className="w-full md:w-[280px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-r border-primary/10 p-4 flex flex-col gap-6 hidden md:flex">
         <header className="flex items-center gap-3 px-2">
           <Crown className="text-primary h-8 w-8" />
           <h1 className="text-2xl font-bold text-primary-foreground">
@@ -378,7 +378,7 @@ export default function DashboardPage() {
       </main>
 
       {/* Right Panel */}
-      <aside className="w-[350px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-l border-primary/10 p-4 flex flex-col gap-4 overflow-y-auto">
+      <aside className="w-full md:w-[350px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-l border-primary/10 p-4 flex-col gap-4 overflow-y-auto hidden md:flex">
         <Card className="border-accent/30 bg-gradient-to-br from-accent/10 to-transparent">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-accent">
@@ -419,5 +419,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    

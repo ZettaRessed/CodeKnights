@@ -60,3 +60,18 @@
     background-color: white;
     border-radius: var(--radius);
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .mission-grid-narrative,
+    .mission-grid-code {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        overflow-y: auto;
+        height: auto;
+    }
+
+    .mission-panel {
+        margin-bottom: 1rem;
+    }
+}

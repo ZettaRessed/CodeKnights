@@ -162,18 +162,18 @@ export default function LoginPage() {
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
-      <Card className="z-20 w-full max-w-md bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 animate-slide-in-from-bottom">
+      <Card className="z-20 w-full max-w-sm sm:max-w-md bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 animate-slide-in-from-bottom">
         <CardHeader className="text-center">
-          <div className="flex justify-center items-center gap-4 mb-2">
-            <ShieldCheck className="h-10 w-10 text-primary" />
-            <h1 className="text-4xl font-bold text-primary-foreground">
+          <div className="flex justify-center items-center gap-2 sm:gap-4 mb-2">
+            <ShieldCheck className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary-foreground">
               CodeKnights
             </h1>
           </div>
-          <CardTitle className="text-2xl text-primary">
+          <CardTitle className="text-xl sm:text-2xl text-primary">
             Forja tu Leyenda
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm sm:text-base">
             Inicia sesión para continuar tu aventura en los Reinos del Código.
           </CardDescription>
         </CardHeader>
@@ -217,7 +217,7 @@ export default function LoginPage() {
               />
               <Button
                 type="submit"
-                className="w-full text-lg"
+                className="w-full text-base sm:text-lg"
                 disabled={isLoading}
               >
                 {isLoading ? 'Verificando...' : 'Entrar al Reino'}

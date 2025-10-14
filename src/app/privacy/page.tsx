@@ -33,11 +33,11 @@ export default function PrivacyPolicyPage() {
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
-      <Card className="z-20 w-full max-w-3xl bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 animate-slide-in-from-bottom">
+      <Card className="z-20 w-full max-w-sm sm:max-w-3xl bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 animate-slide-in-from-bottom">
         <CardHeader className="text-center">
-          <div className="flex justify-center items-center gap-4 mb-2">
-            <FileLock className="h-10 w-10 text-primary" />
-            <h1 className="text-4xl font-bold text-primary-foreground">
+          <div className="flex justify-center items-center gap-2 sm:gap-4 mb-2">
+            <FileLock className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary-foreground">
               Política de Privacidad
             </h1>
           </div>

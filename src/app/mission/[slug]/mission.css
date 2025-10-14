@@ -1,29 +1,47 @@
 .mission-grid-narrative {
     display: grid;
-    grid-template-columns: 400px 1fr;
+    grid-template-columns: 1fr;
     gap: 1rem;
     height: 100%;
     overflow: hidden;
 }
 
+@media (min-width: 768px) {
+    .mission-grid-narrative {
+        grid-template-columns: 400px 1fr;
+    }
+}
+
 .mission-grid-code {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
     gap: 1rem;
     height: 100%;
     overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+    .mission-grid-code {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto 1fr;
+    }
 }
 
 .mission-panel {
     background-color: hsl(var(--card) / 0.6);
     border-radius: var(--radius);
     border: 1px solid hsl(var(--border));
-    padding: 1.5rem;
+    padding: 1rem;
     overflow-y: auto;
     backdrop-filter: blur(4px);
     display: flex;
     flex-direction: column;
+}
+
+@media (min-width: 640px) {
+    .mission-panel {
+        padding: 1.5rem;
+    }
 }
 
 .king-panel {
@@ -59,19 +77,4 @@
     border: 0;
     background-color: white;
     border-radius: var(--radius);
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .mission-grid-narrative,
-    .mission-grid-code {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        overflow-y: auto;
-        height: auto;
-    }
-
-    .mission-panel {
-        margin-bottom: 1rem;
-    }
 }

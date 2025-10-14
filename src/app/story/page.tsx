@@ -29,7 +29,7 @@ const ComicPanel = ({
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
     </div>
-    <p className="text-center text-sm text-muted-foreground p-2 bg-black/20 rounded-md">
+    <p className="text-center text-xs sm:text-sm text-muted-foreground p-2 bg-black/20 rounded-md">
       {caption}
     </p>
   </div>
@@ -46,16 +46,16 @@ export default function StoryPage() {
     <div className="relative min-h-screen w-full bg-background font-headline text-foreground flex items-center justify-center p-4 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-background via-black/50 to-background z-10"></div>
 
-      <Card className="z-20 max-w-4xl w-full bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20">
-        <CardContent className="p-6">
+      <Card className="z-20 max-w-sm sm:max-w-4xl w-full bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20">
+        <CardContent className="p-4 sm:p-6">
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold text-primary-foreground">
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary-foreground">
               La Saga de los CodeKnights
             </h1>
-            <p className="text-primary">Una crónica de código y caos</p>
+            <p className="text-primary text-sm sm:text-base">Una crónica de código y caos</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
             {binaryVoidImage && (
               <ComicPanel
                 imageUrl={binaryVoidImage.imageUrl}
@@ -91,14 +91,14 @@ export default function StoryPage() {
           </div>
           
           <div className="text-center">
-             <p className="text-lg text-primary-foreground mb-6">
+             <p className="text-base sm:text-lg text-primary-foreground mb-6">
                 Tu leyenda está a punto de comenzar. ¿Estás listo para forjar tu destino?
             </p>
             <div className="flex justify-center">
                 <Button
                 onClick={() => router.push('/dashboard')}
                 size="lg"
-                className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100"
+                className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 hover:shadow-lg hover:shadow-accent text-base sm:text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-100"
                 >
                 <Swords className="mr-2" />
                 ¡Comenzar mi Aventura!
@@ -110,5 +110,3 @@ export default function StoryPage() {
     </div>
   );
 }
-
-    

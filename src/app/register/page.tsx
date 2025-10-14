@@ -158,11 +158,11 @@ export default function RegisterPage() {
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background z-10"></div>
-      <Card className="z-20 w-full max-w-2xl bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 animate-slide-in-from-bottom">
+      <Card className="z-20 w-full max-w-sm sm:max-w-2xl bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 animate-slide-in-from-bottom">
         <CardHeader className="text-center">
-          <div className="flex justify-center items-center gap-4 mb-2">
-            <UserCheck className="h-10 w-10 text-primary" />
-            <h1 className="text-4xl font-bold text-primary-foreground">
+          <div className="flex justify-center items-center gap-2 sm:gap-4 mb-2">
+            <UserCheck className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary-foreground">
               Juramento del Caballero
             </h1>
           </div>
@@ -406,5 +406,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-    

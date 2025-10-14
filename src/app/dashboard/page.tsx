@@ -177,11 +177,11 @@ export default function DashboardPage() {
       <DialogContent className="max-w-3xl bg-card/95 backdrop-blur-sm border-primary/20">
         <DialogHeader>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
               <kingdom.icon />
             </div>
             <div>
-              <DialogTitle className="text-3xl font-bold text-primary-foreground">{kingdom.name}</DialogTitle>
+              <DialogTitle className="text-2xl md:text-3xl font-bold text-primary-foreground">{kingdom.name}</DialogTitle>
               <DialogDescription>{kingdom.description}</DialogDescription>
             </div>
           </div>
@@ -223,7 +223,7 @@ export default function DashboardPage() {
                               isCompleted ? "border-green-500/70" : "border-amber-500/70",
                               isCurrent && "border-accent shadow-lg shadow-accent/10"
                             )}>
-                            <CardContent className="p-4 flex items-center justify-between">
+                            <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                               <div className="flex items-center gap-4">
                                 {isCompleted ? (
                                   <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0" />
@@ -232,12 +232,12 @@ export default function DashboardPage() {
                                 ) : (
                                   <Lock className="h-6 w-6 text-muted-foreground flex-shrink-0" />
                                 )}
-                                <div>
+                                <div className="flex-grow">
                                   <p className="font-bold text-primary-foreground">{mission.title}</p>
                                   <p className="text-xs text-muted-foreground">{mission.summary}</p>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-6">
+                              <div className="flex items-center gap-4 sm:gap-6 self-end sm:self-center">
                                 <div className="flex items-center gap-2 text-accent">
                                     <Gem className="h-4 w-4" />
                                     <span className="font-bold text-sm">{mission.rewards.gems}</span>
@@ -248,7 +248,7 @@ export default function DashboardPage() {
                                 </div>
                                 <Button asChild size="sm" disabled={!isCompleted && !isCurrent}>
                                   <Link href={`/mission/${mission.slug}`}>
-                                    {isCompleted ? "Repasar" : "Empezar"} <ChevronRight className="h-4 w-4 ml-2" />
+                                    {isCompleted ? "Repasar" : "Empezar"} <ChevronRight className="h-4 w-4 ml-1 sm:ml-2" />
                                   </Link>
                                 </Button>
                               </div>
@@ -366,8 +366,8 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col p-6 overflow-hidden">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+      <main className="flex-1 flex flex-col p-2 sm:p-6 overflow-hidden">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4 sm:mb-6">
           <span className="text-primary-foreground font-medium">
             Reinos del Código
           </span>
@@ -378,7 +378,7 @@ export default function DashboardPage() {
       </main>
 
       {/* Right Panel */}
-      <aside className="w-full md:w-[350px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-l border-primary/10 p-4 flex-col gap-4 overflow-y-auto hidden md:flex">
+      <aside className="w-full md:w-[350px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-l border-primary/10 p-4 flex-col gap-4 overflow-y-auto hidden lg:flex">
         <Card className="border-accent/30 bg-gradient-to-br from-accent/10 to-transparent">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-accent">

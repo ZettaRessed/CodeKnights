@@ -140,30 +140,30 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   };
 
   const MissionHeader = () => (
-     <header className="flex items-center justify-between flex-shrink-0 bg-card/60 border border-primary/20 p-2 px-4 rounded-lg">
-        <div className="flex items-center gap-4">
+     <header className="flex items-center justify-between flex-shrink-0 bg-card/60 border border-primary/20 p-2 px-4 rounded-lg flex-wrap gap-2">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Button variant="outline" size="sm" asChild>
             <Link href="/dashboard">
-              <ChevronLeft className="h-4 w-4 mr-2"/>
-              Volver al Mapa
+              <ChevronLeft className="h-4 w-4 mr-1 sm:mr-2"/>
+              <span className="hidden sm:inline">Volver</span>
             </Link>
           </Button>
           <div>
-            <h1 className="text-xl font-bold text-primary-foreground">{mission.title}</h1>
-            <p className="text-sm text-muted-foreground">{mission.description}</p>
+            <h1 className="text-lg sm:text-xl font-bold text-primary-foreground">{mission.title}</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">{mission.description}</p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-accent">
-                <Gem className="h-5 w-5" />
-                <span className="font-bold">{mission.rewards.gems} Gemas</span>
+        <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-1 sm:gap-2 text-accent">
+                <Gem className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="font-bold text-sm sm:text-base">{mission.rewards.gems} <span className="hidden sm:inline">Gemas</span></span>
             </div>
-             <div className="flex items-center gap-2 text-primary">
-                <Sparkles className="h-5 w-5" />
-                <span className="font-bold">{mission.rewards.xp} XP</span>
+             <div className="flex items-center gap-1 sm:gap-2 text-primary">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="font-bold text-sm sm:text-base">{mission.rewards.xp} XP</span>
             </div>
-          <Button onClick={handleCompleteMission} disabled={isCorrect !== true}>
-            <Trophy className="mr-2 h-4 w-4" /> Reclamar Recompensa
+          <Button onClick={handleCompleteMission} disabled={isCorrect !== true} size="sm" className="text-xs sm:text-sm">
+            <Trophy className="mr-2 h-4 w-4" /> Reclamar
           </Button>
         </div>
       </header>
@@ -171,12 +171,12 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   
   const KingPanel = () => (
     <div className="king-panel">
-        <div className="relative w-full h-64 mb-4">
+        <div className="relative w-full h-48 sm:h-64 mb-4">
              <Image src={kingExpressions[kingExpression]} alt={`Rey Tim Berners-Lee - ${kingExpression}`} layout="fill" objectFit="contain" />
         </div>
         <Card className="bg-background/70 border-primary/20">
-            <CardContent className="p-4">
-                 <p className="text-primary-foreground text-center italic">"{kingDialogue}"</p>
+            <CardContent className="p-3 sm:p-4">
+                 <p className="text-primary-foreground text-center text-sm sm:text-base italic">"{kingDialogue}"</p>
             </CardContent>
         </Card>
     </div>
@@ -185,8 +185,8 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   const ObjectivesPanel = () => (
     <>
       <div>
-        <h2 className="flex items-center gap-2 text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
-        <p className="text-muted-foreground mt-2">{mission.summary}</p>
+        <h2 className="flex items-center gap-2 text-xl sm:text-2xl font-bold text-primary-foreground"><Flag /> Objetivos</h2>
+        <p className="text-muted-foreground mt-2 text-sm sm:text-base">{mission.summary}</p>
       </div>
       
       <div className="space-y-4 mt-4">
@@ -200,7 +200,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
 
       {mission.lore && (
           <div className="mt-4">
-          <h3 className="flex items-center gap-2 text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
+          <h3 className="flex items-center gap-2 text-lg sm:text-xl font-bold text-primary"><BookOpen /> El Pergamino dice...</h3>
           <p className="text-sm text-muted-foreground mt-2 italic">{mission.lore}</p>
           </div>
       )}
@@ -209,7 +209,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
 
   const EditorPanel = () => (
     <>
-      <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
+      <h2 className="flex items-center gap-2 text-base sm:text-lg font-bold text-primary-foreground mb-2"><FileCode/> Editor de Código</h2>
       <Textarea
           id="code-editor"
           value={code}
@@ -217,7 +217,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
           className="flex-grow font-code"
           placeholder="Escribe tu código aquí..."
       />
-      <Button onClick={handleExecuteCode} className="mt-2">
+      <Button onClick={handleExecuteCode} className="mt-2" size="sm">
           <Play className="mr-2 h-4 w-4" />
           Ejecutar Código
       </Button>
@@ -226,7 +226,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
 
   const VisualizerPanel = () => (
     <>
-      <h2 className="flex items-center gap-2 text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
+      <h2 className="flex items-center gap-2 text-base sm:text-lg font-bold text-primary-foreground mb-2"><Eye/> Visualizador</h2>
       <div className='flex-grow bg-white rounded-md'>
           <iframe
               srcDoc={srcDoc}
@@ -243,7 +243,7 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
         const question = mission.challenge as TriviaQuestion;
         return (
              <div className="mission-panel challenge-panel">
-                 <h2 className="text-2xl font-bold text-primary-foreground mb-4">{question.question}</h2>
+                 <h2 className="text-xl sm:text-2xl font-bold text-primary-foreground mb-4">{question.question}</h2>
                  <div className="flex flex-col gap-3">
                      {question.options.map(option => {
                         const isSelected = selectedAnswer === option;
@@ -254,22 +254,22 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                             <Button 
                                 key={option} 
                                 variant={buttonVariant}
-                                className="h-auto justify-start p-4 text-left whitespace-normal"
+                                className="h-auto justify-start p-3 sm:p-4 text-left whitespace-normal"
                                 onClick={() => handleTriviaSubmit(option)}
                                 disabled={isCorrect !== null}
                             >
                                 {showIcon && (isCorrect ? <Check className="mr-3"/> : <X className="mr-3"/>)}
-                                <span className="font-code text-sm">{option}</span>
+                                <span className="font-code text-xs sm:text-sm">{option}</span>
                             </Button>
                         )
                     })}
                  </div>
                  {isCorrect === true && (
                     <div className="mt-6 text-center">
-                        <h3 className="text-2xl font-bold text-accent">
+                        <h3 className="text-xl sm:text-2xl font-bold text-accent">
                             ¡Respuesta Correcta!
                         </h3>
-                        <p className="text-muted-foreground mt-2">{`Has ganado el logro: "${mission.achievement}"`}</p>
+                        <p className="text-muted-foreground mt-2 text-sm sm:text-base">{`Has ganado el logro: "${mission.achievement}"`}</p>
                         <Button onClick={handleNextMission} className="mt-4">
                             Continuar
                         </Button>
@@ -277,8 +277,8 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                  )}
                  {isCorrect === false && (
                     <div className="mt-6 text-center p-4 border border-destructive/50 rounded-lg bg-destructive/10">
-                        <h3 className="text-2xl font-bold text-destructive-foreground">Respuesta Incorrecta</h3>
-                        <p className="text-muted-foreground mt-2">El Rey no está complacido. ¿Qué harás, caballero?</p>
+                        <h3 className="text-xl sm:text-2xl font-bold text-destructive-foreground">Respuesta Incorrecta</h3>
+                        <p className="text-muted-foreground mt-2 text-sm sm:text-base">El Rey no está complacido. ¿Qué harás, caballero?</p>
                         
                         {showHint && question.hint && (
                            <Card className="mt-4 bg-background/80 border-accent/30 text-left">
@@ -288,12 +288,12 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
                            </Card>
                         )}
                         
-                        <div className="mt-4 flex justify-center gap-4">
-                            <Button variant="outline" onClick={handleRetry}>
+                        <div className="mt-4 flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+                            <Button variant="outline" onClick={handleRetry} size="sm">
                                 <RefreshCw className="mr-2"/> Reintentar Misión
                                 <span className="ml-2 text-xs text-red-400">(-5 XP)</span>
                             </Button>
-                            <Button variant="outline" onClick={handleShowHint} disabled={showHint}>
+                            <Button variant="outline" onClick={handleShowHint} disabled={showHint} size="sm">
                                 <Lightbulb className="mr-2"/> Pedir Pista
                                 <span className="ml-2 flex items-center text-xs text-yellow-400">(-15 <Gem className="h-3 w-3 ml-1"/>)</span>
                             </Button>
@@ -313,11 +313,11 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
   }
 
   return (
-    <div className="flex h-screen w-full flex-col font-headline bg-background dark:bg-black/40 p-4 gap-4">
+    <div className="flex h-screen w-full flex-col font-headline bg-background dark:bg-black/40 p-2 sm:p-4 gap-2 sm:gap-4">
       <MissionHeader />
 
       <main className={cn(
-        'flex-1 grid overflow-hidden',
+        'flex-1 grid overflow-hidden gap-2 sm:gap-4',
         mission.type === 'code' ? 'mission-grid-code' : 'mission-grid-narrative'
       )}>
         {mission.type === 'code' ? (
@@ -336,11 +336,11 @@ export default function MissionClientWrapper({ mission }: { mission: Mission }) 
             </div>
             
             {isCorrect !== null && (
-              <div className="col-span-2 mt-4 text-center bg-card/80 p-4 rounded-lg border border-primary/20">
-                  <h3 className={cn("text-2xl font-bold", isCorrect ? "text-accent" : "text-destructive-foreground")}>
+              <div className="col-span-1 lg:col-span-2 mt-4 text-center bg-card/80 p-4 rounded-lg border border-primary/20">
+                  <h3 className={cn("text-xl sm:text-2xl font-bold", isCorrect ? "text-accent" : "text-destructive-foreground")}>
                       {isCorrect ? "¡Código Correcto!" : "Código Incorrecto"}
                   </h3>
-                  <p className="text-muted-foreground mt-2">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
+                  <p className="text-muted-foreground mt-2 text-sm sm:text-base">{isCorrect ? `Has ganado el logro: "${mission.achievement}"` : "El Rey no está complacido. Pero no te rindas."}</p>
                   {isCorrect ? (
                       <Button onClick={handleNextMission} className="mt-4">
                           Continuar

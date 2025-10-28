@@ -236,22 +236,24 @@ export default function GuildHtmlPage() {
           <TabsContent value="library" className="mt-6">
             <h2 className="text-2xl font-bold text-accent mb-4">Biblioteca de los Forjadores</h2>
             <ScrollArea className="h-[60vh]">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-4">
-                    {libraryResources.map((res, i) => (
-                        <Card key={i} className="bg-card/80 flex flex-col">
-                            <CardHeader>
-                                <CardTitle>{res.title}</CardTitle>
-                                <CardDescription>Autor: {res.author}</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex-grow">
-                                <p className="text-muted-foreground">{res.description}</p>
-                            </CardContent>
-                            <CardFooter>
-                                <Button variant="outline"><BookOpen className="mr-2"/> Leer Pergamino</Button>
-                            </CardFooter>
-                        </Card>
-                    ))}
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-4">
+                {libraryResources.map((res, i) => (
+                  <Card key={i} className="bg-card/80 flex flex-col hover:border-accent/50 transition-all">
+                    <CardHeader>
+                      <CardTitle>{res.title}</CardTitle>
+                      <CardDescription>Autor: {res.author}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <p className="text-muted-foreground">{res.description}</p>
+                    </CardContent>
+                    <CardFooter>
+                      <Button variant="outline" className="w-full">
+                        <BookOpen className="mr-2 h-4 w-4" /> Leer Pergamino
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
             </ScrollArea>
           </TabsContent>
         </Tabs>

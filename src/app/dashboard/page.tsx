@@ -358,8 +358,10 @@ export default function DashboardPage() {
               <Users className="h-5 w-5" /> Gremio
             </Link>
           </Button>
-          <Button variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground">
-            <BookMarked className="h-5 w-5" /> Biblioteca
+          <Button asChild variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground">
+            <Link href="/guild/html">
+              <BookMarked className="h-5 w-5" /> Biblioteca
+            </Link>
           </Button>
           <Button variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground mt-auto">
             <Settings className="h-5 w-5" /> Ajustes
@@ -421,3 +423,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    

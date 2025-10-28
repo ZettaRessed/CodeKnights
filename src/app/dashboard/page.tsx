@@ -353,8 +353,10 @@ export default function DashboardPage() {
           <Button variant="ghost" className="justify-start gap-3 text-lg h-12 bg-primary/10 text-primary-foreground">
             <Map className="h-5 w-5 text-accent" /> Reinos
           </Button>
-          <Button variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground">
-            <Users className="h-5 w-5" /> Gremio
+          <Button asChild variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground">
+            <Link href="/guild/html">
+              <Users className="h-5 w-5" /> Gremio
+            </Link>
           </Button>
           <Button variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground">
             <BookMarked className="h-5 w-5" /> Biblioteca

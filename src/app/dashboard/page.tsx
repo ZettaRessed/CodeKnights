@@ -338,7 +338,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col md:flex-row h-screen w-full font-headline overflow-hidden bg-background dark:bg-black/40">
       {/* Left Sidebar */}
-      <aside className="w-full md:w-[280px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-r border-primary/10 p-4 flex flex-col gap-6 hidden md:flex">
+      <aside className="w-full md:w-[280px] flex-shrink-0 bg-card/60 dark:bg-card/30 border-r border-primary/10 p-4 flex-col gap-6 hidden md:flex">
         <header className="flex items-center gap-3 px-2">
           <Crown className="text-primary h-8 w-8" />
           <h1 className="text-2xl font-bold text-primary-foreground">
@@ -363,8 +363,10 @@ export default function DashboardPage() {
               <BookMarked className="h-5 w-5" /> Biblioteca
             </Link>
           </Button>
-          <Button variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground mt-auto">
-            <Settings className="h-5 w-5" /> Ajustes
+          <Button asChild variant="ghost" className="justify-start gap-3 text-lg h-12 text-muted-foreground hover:text-primary-foreground mt-auto">
+            <Link href="/settings">
+              <Settings className="h-5 w-5" /> Ajustes
+            </Link>
           </Button>
         </nav>
       </aside>
@@ -423,5 +425,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    

@@ -100,6 +100,11 @@ const libraryResources = [
         title: 'Animaciones de Neón con CSS',
         description: 'Aprende a crear los efectos de neón pulsante que ves en todo el reino, usando solo CSS.',
         author: 'Lord Sudo',
+    },
+    {
+        title: 'El Arte del Posicionamiento',
+        description: 'Domina las propiedades position: relative, absolute, fixed y sticky para controlar cada pixel.',
+        author: 'Sir Render',
     }
 ];
 
@@ -231,14 +236,14 @@ export default function GuildHtmlPage() {
           <TabsContent value="library" className="mt-6">
             <h2 className="text-2xl font-bold text-accent mb-4">Biblioteca de los Forjadores</h2>
             <ScrollArea className="h-[60vh]">
-                <div className="space-y-4 pr-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-4">
                     {libraryResources.map((res, i) => (
-                        <Card key={i} className="bg-card/80">
+                        <Card key={i} className="bg-card/80 flex flex-col">
                             <CardHeader>
                                 <CardTitle>{res.title}</CardTitle>
                                 <CardDescription>Autor: {res.author}</CardDescription>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="flex-grow">
                                 <p className="text-muted-foreground">{res.description}</p>
                             </CardContent>
                             <CardFooter>
